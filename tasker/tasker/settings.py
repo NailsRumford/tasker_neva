@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'ObjectOfProtection.apps.ObjectOfProtectionConfig'
+    'object_of_protection.apps.ObjectOfProtectionConfig'
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
