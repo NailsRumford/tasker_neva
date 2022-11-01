@@ -18,5 +18,9 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('engineer/', include('engineer.urls')),
+    path('fitter/', include('fitter.urls')),
+    path('repairman/', include('repairman.urls')),
+    path('researcher/', include('researcher.urls')),
     path('', include('object_of_protection.urls') )
 ]
