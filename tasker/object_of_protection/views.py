@@ -6,10 +6,10 @@ def index(request):
 
 
 def object_of_protection_list(request):
-    return HttpResponse('Список мороженого')
+    return HttpResponse('Список объектов охраны')
 
 
 # В урл мы ждем парметр, и нужно его прередать в функцию для использования
-def object_of_protection_detail(request, pk):
-    return HttpResponse(f'Мороженое номер {pk}')
+def object_of_protection_detail(request, pn):
+    return HttpResponse(f'Объект охраны {pn}')
 # Create your views here.
