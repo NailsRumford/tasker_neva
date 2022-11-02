@@ -31,10 +31,11 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'repairman.apps.RepairmanConfig',
+    'administrator_bd.apps.AdministratorBDConfig',
     'engineer.apps.EngineerConfig',
     'fitter.apps.FitterConfig',
     'researcher.apps.ResearcherConfig',
-    'object_of_protection.apps.ObjectOfProtectionConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -21,7 +21,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('engineer/', include('engineer.urls')),
     path('fitter/', include('fitter.urls')),
-    path('repairman/', include('Repairman.urls')),
     path('researcher/', include('researcher.urls')),
+    path('admin_bd/', include('administrator_bd.urls')),
+    path('repairman/', include('repairman/urls')),
     path('', views.index)
 ]

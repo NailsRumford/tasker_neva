@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ObjectOfProtectionConfig(AppConfig):
+class AdministratorBDConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'object_of_protection'
+    name = 'admin_bd'
