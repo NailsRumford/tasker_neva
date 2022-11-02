@@ -1,15 +1,16 @@
-from django.http import HttpResponse
+from django.shortcuts import render
 
 
 def index(request):
-    return HttpResponse('Главная страница')
+    template = 'object_of_protection\index.html'
+    return render(request, template)
 
 
 def object_of_protection_list(request):
-    return HttpResponse('Список объектов охраны')
+    return render('Список объектов охраны')
 
 
 # В урл мы ждем парметр, и нужно его прередать в функцию для использования
 def object_of_protection_detail(request, pn):
-    return HttpResponse(f'Объект охраны {pn}')
+    return render(f'Объект охраны {pn}')
 # Create your views here.
