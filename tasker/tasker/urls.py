@@ -22,7 +22,6 @@ urlpatterns = [
     path('engineer/', include('engineer.urls')),
     path('fitter/', include('fitter.urls')),
     path('researcher/', include('researcher.urls')),
-    path('admin_bd/', include('administrator_bd.urls')),
     path('repairman/', include('repairman/urls')),
     path('', views.index)
 ]

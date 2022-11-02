@@ -32,7 +32,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'repairman.apps.RepairmanConfig',
-    'administrator_bd.apps.AdministratorBDConfig',
     'engineer.apps.EngineerConfig',
     'fitter.apps.FitterConfig',
     'researcher.apps.ResearcherConfig',
