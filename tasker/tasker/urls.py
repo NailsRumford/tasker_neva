@@ -19,9 +19,10 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('engineer/', include('engineer.urls')),
-    path('fitter/', include('fitter.urls')),
-    path('researcher/', include('researcher.urls')),
-    path('repairman/', include('repairman/urls')),
-    path('', views.index)
+    path('engineer/', include('engineer.urls', namespace= 'engineer')),
+    path('fitter/', include('fitter.urls', namespace= 'fitter')),
+    path('researcher/', include('researcher.urls' , namespace= 'researcher')),
+    path('repairman/', include('repairman.urls', namespace= 'repairman')),
+    path('adminbd/',include('adminbd.urls', namespace= 'adminbd')),
+    path('', views.index),
 ]

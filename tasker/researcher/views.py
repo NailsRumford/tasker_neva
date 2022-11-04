@@ -1,5 +1,6 @@
-from django.http import HttpResponse
+from django.shortcuts import render
 
 
 def index(request):
-    return HttpResponse('Обследовальщик')
+    template = 'researcher/index.html'
+    return render(request, template )

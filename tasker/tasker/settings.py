@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'repairman.apps.RepairmanConfig',
     'engineer.apps.EngineerConfig',
+    'adminbd.apps.AdminbdConfig',
     'fitter.apps.FitterConfig',
     'researcher.apps.ResearcherConfig',
     'django.contrib.admin',
@@ -56,7 +57,8 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'tasker.urls'
 
 
-TEMPLATES_DIR = os.path.join(BASE_DIR , 'templates')
+TEMPLATES_DIR = os.path.join(BASE_DIR , 'templates', 
+                                        )
 
 TEMPLATES = [
     {
