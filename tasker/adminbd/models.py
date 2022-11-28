@@ -15,4 +15,10 @@ class FireSafetyService (models.Model):
         on_delete=models.CASCADE,
         related_name='posts'
     )
+    def __str__(self) -> str:
+        return f'{self.name_object}'
 
+
+
+class Repairman (models.Model):
+    first_name = models.TextField()

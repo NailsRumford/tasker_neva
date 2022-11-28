@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'engineer.apps.EngineerConfig',
     'adminbd.apps.AdminbdConfig',
     'fitter.apps.FitterConfig',
+    'users.apps.UsersConfig',
     'researcher.apps.ResearcherConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
 ]
 
 MIDDLEWARE = [
