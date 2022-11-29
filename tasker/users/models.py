@@ -9,3 +9,5 @@ class User(AbstractUser):
             ('S', 'Обследовальщик'),
             ('F', 'Монтажник'))
     rank = models.CharField(max_length=1, choices=RANK_PERSON )
+
+

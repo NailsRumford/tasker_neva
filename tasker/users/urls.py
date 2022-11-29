@@ -1,5 +1,6 @@
 from django.contrib.auth import views
 from django.urls import path
+from .views import sort_users
 
 app_name = 'users'
 
@@ -26,4 +27,6 @@ urlpatterns = [
     # Сообщение об успешном восстановлении пароля
     path('auth/reset/done/', views.PasswordResetCompleteView.as_view(),
          name='password_reset_complete'),
+    # Перенаправление пользователей
+    path('auth/users/', sort_users , name='sort_users'),
 ]
