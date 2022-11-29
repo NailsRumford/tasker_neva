@@ -33,9 +33,10 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'repairman.apps.RepairmanConfig',
     'engineer.apps.EngineerConfig',
-    'adminbd.apps.AdminbdConfig',
     'fitter.apps.FitterConfig',
     'users.apps.UsersConfig',
+    'core.apps.CoreConfig',
+    'admindb.apps.AdmindbConfig',
     'researcher.apps.ResearcherConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -59,8 +60,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'tasker.urls'
 
 
-TEMPLATES_DIR = os.path.join(BASE_DIR , 'templates' 
-                                        )
+TEMPLATES_DIR = os.path.join(BASE_DIR , 'templates')
 
 TEMPLATES = [
     {
@@ -73,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.year.year',
             ],
         },
     },
@@ -134,3 +135,11 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = 'posts:index'
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+# указываем директорию, в которую будут складываться файлы писем
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'core/sent_emails') 
+
+AUTH_USER_MODEL = 'users.User'

@@ -14,11 +14,13 @@
     <meta name="theme-color" content="#ffffff">
     <!-- Подключен файл со стандартными стилями бустрап -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <title>Последние обновления на сайте</title>
+    {% block title %}
+      Похоже кодер что то не докодил 
+    {% endblock %}
   </head>
   <body>
     <header>
-      {% include 'tasker/includes/header.html' %}
+      {% include 'users/includes/header.html' %}
     </header>
     <main> 
       <div class="container py-5">
@@ -27,7 +29,7 @@
         {% endblock %}
       </div>   
     <footer class="border-top text-center py-3">
-      {% include 'tasker/includes/footer.html' %}     
+      {% include 'users/includes/footer.html' %}     
     </footer>
   </body>
 </html>
