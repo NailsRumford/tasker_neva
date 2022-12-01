@@ -1,7 +1,13 @@
 <nav class="navbar navbar-dark bg-dark">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
-      <h1> tasker/NEVA </h1>
+      <h1> 
+        {% if user.is_authenticated %}
+        tasker/{{user|upper}}
+        {% else %}  
+        tasker/NEVA
+        {% endif %} 
+      </h1>
     </a>
   </div>
 </nav>
