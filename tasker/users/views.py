@@ -5,7 +5,6 @@ from django.urls import reverse_lazy
 from .forms import CreationForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
-from django.contrib.auth.decorators import login_required
 from .settings import RANK_APP
 
 
@@ -23,5 +22,4 @@ class CreateUser(CreateView):
     form_class = CreationForm
     success_url = reverse_lazy('admindb:create_user')
     template_name = 'users/create_user.html'
-    
     

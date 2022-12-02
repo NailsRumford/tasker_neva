@@ -1,12 +1,12 @@
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth import get_user_model
-from core.decorators.chek import chek_user_rank
+from core.decorators.chek import chek_user
 from .settings import APP_RANK
 
 User = get_user_model()
 
 
-@chek_user_rank(APP_RANK)
+@chek_user(APP_RANK)
 def profile(request, username): 
     """Возвращает страничку пользователя с десятью последними постами"""
     user_model = get_object_or_404(User, username=username)

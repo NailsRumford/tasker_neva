@@ -6,5 +6,5 @@ app_name = 'admindb'
 
 urlpatterns = [
     path('create_user/', CreateUser.as_view(), name='create_user' ),
-    path('profile/<username>/', views.profile, name='profile' )
+    path('<username>/', views.profile, name='profile' )
 ] 

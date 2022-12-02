@@ -1,7 +1,8 @@
 {% extends 'users/base.html' %}
+{% block title %} Авторизация {% endblock%} 
 {% block content %}
 {% load user_filters %}
-<a href = "{% url 'admindb:create_user' %}" target="_blank"> Ссылка на тег a </a>
+<a herf="{% url 'admindb:create_user' %}">создать</a>
 <div class="row justify-content-center">
   <div class="col-md-8 p-5">
     <div class="card">

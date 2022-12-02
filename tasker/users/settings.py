@@ -21,3 +21,4 @@ RANK_APP = {
             researcher.settings.APP_RANK:'researcher:profile',
             fitter.settings.APP_RANK:'fitter:profile',
             }
+
