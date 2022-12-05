@@ -1,6 +1,6 @@
 from django.contrib.auth import views
 from django.urls import path
-from .views import sort_users
+from .views import sort_users, Test
 
 app_name = 'users'
 
@@ -11,7 +11,7 @@ urlpatterns = [
     # Выход
     path('auth/logout/', views.LogoutView.as_view(template_name='users/logged_out.html'), name='logout'),
     # Смена пароля
-    path('auth/password_change/', views.PasswordChangeView.as_view(),
+    path('auth/password_change/', Test.as_view(template_name='users/password_change_form.html'),
          name='password_change'),
     # Сообщение об успешном изменении пароля
     path('auth/password_change/done/', views.PasswordChangeDoneView.as_view(),

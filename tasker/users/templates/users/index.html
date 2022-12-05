@@ -2,7 +2,9 @@
 {% block title %} Авторизация {% endblock%} 
 {% block content %}
 {% load user_filters %}
-<a herf="{% url 'admindb:create_user' %}">создать</a>
+<a href="{% url 'admindb:create_user' %}" class="btn btn-link">
+  Забыли пароль?
+</a>
 <div class="row justify-content-center">
   <div class="col-md-8 p-5">
     <div class="card">
