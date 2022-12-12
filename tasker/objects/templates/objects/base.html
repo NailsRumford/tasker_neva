@@ -15,13 +15,12 @@
     <!-- Подключен файл со стандартными стилями бустрап -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <script src="{% static 'js/bootstrap.min.js' %}"></script> 
-    {% block title %}
-      Похоже кодер что то не докодил 
-    {% endblock %}
+    <script>alert();</script> 
+    <title>{% block title %} Последние обновления на сайте {% endblock %}</title>
   </head>
   <body>
     <header>
-      {% include 'users/includes/header.html' %}
+      {% include 'admindb/includes/header.html' %}
     </header>
     <main> 
       <div class="container py-5">
@@ -30,7 +29,7 @@
         {% endblock %}
       </div>   
     <footer class="border-top text-center py-3">
-      {% include 'users/includes/footer.html' %}     
+      {% include 'admindb/includes/footer.html' %}     
     </footer>
   </body>
 </html>

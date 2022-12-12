@@ -9,5 +9,6 @@ urlpatterns = [
     path('fitter/', include('fitter.urls', namespace='fitter')),
     path('researcher/', include('researcher.urls', namespace='researcher')),
     path('repairman/', include('repairman.urls', namespace='repairman')),
+    path('objects/', include('objects.urls', namespace='objects')),
     path('', include('users.urls', namespace='users')),
 ]
