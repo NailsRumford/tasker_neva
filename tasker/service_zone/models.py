@@ -1,0 +1,45 @@
+from django.db import models
+
+from django.db import models
+
+
+class ServiceZone(models.Model):
+    """
+    Модель зоны обслуживания.
+
+    Attributes:
+        name (str): Название зоны обслуживания.
+        description (str): Подробное описание зоны обслуживания.
+        branch (ForeignKey): Филиал, к которому относится зона обслуживания.
+    """
+
+    name = models.CharField(
+        verbose_name='название',
+        help_text='Название зоны обслуживания.',
+        max_length=100
+    )
+
+    description = models.TextField(
+        verbose_name='описание',
+        help_text='Подробное описание зоны обслуживания.',
+        blank=True
+    )
+
+    branch = models.ForeignKey(
+        Branch,
+        on_delete=models.CASCADE,
+        verbose_name='филиал',
+        help_text='Филиал, к которому относится зона обслуживания.'
+    )
+
+    technicians = models.ManyToManyField(
+        Technician,
+        verbose_name='техники',
+        help_text='Техники, работающие в этой зоне обслуживания.',
+        blank=True,
+        related_name='service_zones'
+    )
+
+    class Meta:
+        verbose_name = 'зона обслуживания'
+        verbose_name_plural = 'зоны обслуживания'
