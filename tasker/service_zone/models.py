@@ -6,11 +6,6 @@ from django.db import models
 class ServiceZone(models.Model):
     """
     Модель зоны обслуживания.
-
-    Attributes:
-        name (str): Название зоны обслуживания.
-        description (str): Подробное описание зоны обслуживания.
-        branch (ForeignKey): Филиал, к которому относится зона обслуживания.
     """
 
     name = models.CharField(
