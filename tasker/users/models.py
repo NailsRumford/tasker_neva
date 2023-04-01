@@ -2,7 +2,6 @@ from django.db import models
 
 from django.db import models
 from django.contrib.auth import get_user_model
-from service_zone.models import ServiceZone
 from branch.models import Branch
 User = get_user_model()
 
@@ -60,13 +59,6 @@ class Technician(models.Model):
         help_text='Укажите, активена ли учетная запись техник',
     )
 
-    #service_zones = models.ManyToManyField(
-    #    ServiceZone,
-    #    verbose_name='зоны обслуживания',
-    #    help_text='Зоны обслуживания, в которых работает этот техник.',
-    #    blank=True,
-    #    related_name='technicians'
-    #)
 
     class Meta:
         verbose_name = 'техник'
