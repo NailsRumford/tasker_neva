@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'sorl.thumbnail',
     'users.apps.UsersConfig',
+    'core.apps.CoreConfig',
+    'branch.apps.BranchConfig',
 ]
 
 MIDDLEWARE = [
