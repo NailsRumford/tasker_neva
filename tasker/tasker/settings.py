@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'core.apps.CoreConfig',
     'branch.apps.BranchConfig',
+    'service_zone.apps.ServiceZoneConfig'
 ]
 
 MIDDLEWARE = [
