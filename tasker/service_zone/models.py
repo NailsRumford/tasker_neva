@@ -1,6 +1,6 @@
 from django.db import models
+from branch.models import Branch
 
-from django.db import models
 
 
 class ServiceZone(models.Model):
@@ -27,14 +27,15 @@ class ServiceZone(models.Model):
         help_text='Филиал, к которому относится зона обслуживания.'
     )
 
-    technicians = models.ManyToManyField(
-        Technician,
-        verbose_name='техники',
-        help_text='Техники, работающие в этой зоне обслуживания.',
-        blank=True,
-        related_name='service_zones'
-    )
+    #technicians = models.ManyToManyField(
+    #    Technician,
+    #    verbose_name='техники',
+    #    help_text='Техники, работающие в этой зоне обслуживания.',
+    #    blank=True,
+    #    related_name='service_zones'
+    #)
 
     class Meta:
         verbose_name = 'зона обслуживания'
         verbose_name_plural = 'зоны обслуживания'
+
