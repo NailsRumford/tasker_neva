@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-*oytl#!7wfv7v!1pk-6=_%v1$wye5768xpcp4tyzk71y+f##tq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['example.com', '127.0.0.1']
 
 
 # Application definition
@@ -40,8 +40,8 @@ INSTALLED_APPS = [
     'sorl.thumbnail',
     'users.apps.UsersConfig',
     'core.apps.CoreConfig',
-    'branch.apps.BranchConfig',
-    'service_zone.apps.ServiceZoneConfig',
+    'branches.apps.BranchesConfig',
+    'service_zones.apps.ServiceZonesConfig',
     'technicians.apps.TechniciansConfig',
     'engineers.apps.EngineersConfig',
 ]
@@ -145,7 +145,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'login'
+LOGIN_REDIRECT_URL = 'users:index'
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 

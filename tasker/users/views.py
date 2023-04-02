@@ -27,7 +27,7 @@ def save_polygon(request):
 def division_users(request):
     user = request.user
     if Engineer.objects.filter(user=user).exists():
-        success_url = reverse_lazy('tech_dashboard')
+        success_url = reverse_lazy('engineers:index')
     elif Technician.objects.filter(user=user).exists():
         success_url = reverse_lazy('tech_dashboard')
     else:
@@ -41,5 +41,5 @@ def account_not_confirmed(request):
 
 class SignUp(CreateView):
     form_class = CreationForm
-    success_url = reverse_lazy('posts:index')
+    success_url = reverse_lazy('users:index')
     template_name = 'users/signup.html'

@@ -1,7 +1,6 @@
 from django.db import models
-from branch.models import Branch
+from branches.models import Branch
 from technicians.models import Technician
-
 
 class ServiceZone(models.Model):
     """
@@ -25,6 +24,11 @@ class ServiceZone(models.Model):
         on_delete=models.CASCADE,
         verbose_name='филиал',
         help_text='Филиал, к которому относится зона обслуживания.'
+    )
+
+    geopoints = models.TextField(
+        verbose_name='геоточки',
+        help_text='Геоточки, образующие область зоны обслуживания.'
     )
 
     class Meta:

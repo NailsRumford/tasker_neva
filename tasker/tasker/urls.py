@@ -13,6 +13,7 @@ from django.urls import reverse_lazy
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('engineers/', include('engineers.urls', namespace='engineers')),
 
     #################### Регистрация, и смена пароля##########################
     path('login', LoginView.as_view(template_name='users/login.html'),
