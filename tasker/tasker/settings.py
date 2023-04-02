@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'core.apps.CoreConfig',
     'branch.apps.BranchConfig',
-    'service_zone.apps.ServiceZoneConfig'
+    'service_zone.apps.ServiceZoneConfig',
+    'technicians.apps.TechniciansConfig',
+    'engineers.apps.EngineersConfig',
 ]
 
 MIDDLEWARE = [
@@ -142,8 +144,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-LOGIN_URL = 'users:login'
-LOGIN_REDIRECT_URL = 'users:division_users'
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'login'
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 

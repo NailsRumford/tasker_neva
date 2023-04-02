@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<div id="map" style="width: 600px; height: 400px"></div>
+<form id="polygon-form" method="POST" action="{% url 'users:save_polygon' %}">
+    {% csrf_token %}
+    <input id="polygon-input"  name="polygon" value="">
+    <button id="save-polygon">Сохранить координаты</button>
+</form>
+<script type="text/javascript">
+    ymaps.ready(init);
+    
+    function init () {
+        // Создание карты.
+        var myMap = new ymaps.Map("map", {
+            center: [55.76, 37.64], // Москва
+            zoom: 10
+        }, {
+            searchControlProvider: 'yandex#search'
+        });
+    
+        // Создание полигона на карте.
+        var coords = {{ zone|safe }};
+        var myPolygon = new ymaps.Polygon([coords], {
+            hintContent: "Мой полигон"
+        }, {
+            fillColor: '#7df9ff33',
+            strokeColor: '#0000FF',
+            strokeOpacity: 0.5,
+            strokeWidth: 2
+        });
+        var coords2 = {{ zone2|safe }}
+        var myPolygon2 = new ymaps.Polygon([coords2], {
+            hintContent: "Мой полигон"
+        }, {
+            fillColor: '#7df9ff33',
+            strokeColor: '#0000FF',
+            strokeOpacity: 0.5,
+            strokeWidth: 2
+        });
+
+        // Добавление полигона на карту.
+        myMap.geoObjects.add(myPolygon);
+        myMap.geoObjects.add(myPolygon2);
+    }
+</script>
+{% endblock content %}

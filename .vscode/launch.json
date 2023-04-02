@@ -8,7 +8,7 @@
             "name": "Python: Django",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}\\tasker\\manage.py",
+            "program": "${workspaceFolder}/tasker/manage.py",
             "args": [
                 "runserver"
             ],

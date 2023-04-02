@@ -56,14 +56,15 @@
             <button type="submit" class="btn btn-primary">
               Войти
             </button>
-            <a href="{% url 'users:password_reset' %}" class="btn btn-link">
+            <a href="{% url 'password_reset' %}" class="btn btn-link">
               Забыли пароль?
             </a>
           </div>
           <div class="col">
-            <a href="{% url 'users:signup' %}" class="btn btn-link">
+            <a href="{% url 'signup' %}" class="btn btn-link">
               Регистрация
             </a>
+
           </div>
           </form>
         </div> <!-- card body -->
