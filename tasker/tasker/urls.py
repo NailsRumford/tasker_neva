@@ -1,5 +1,3 @@
-from django.conf import settings
-from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.contrib.auth.views import (LoginView, LogoutView,
@@ -15,8 +13,8 @@ from django.urls import reverse_lazy
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
-    ####################Регистрация, и смена пароля##########################
+
+    #################### Регистрация, и смена пароля##########################
     path('login', LoginView.as_view(template_name='users/login.html'),
          name='login'),
     path('signup/', views.SignUp.as_view(template_name='users/signup.html'),
@@ -44,7 +42,7 @@ urlpatterns = [
         template_name='users/password_change_done.html'),
         name='password_change_done'),
     ##########################################################
-    
+
     path('', include('users.urls', namespace='users')),
 
 ]
