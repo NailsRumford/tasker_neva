@@ -11,12 +11,14 @@ from django.contrib.auth.views import (LoginView, LogoutView,
                                        PasswordResetView)
 from users import views
 from django.urls import reverse_lazy
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    ############################################################
-
+    
+    ####################Регистрация, и смена пароля##########################
     path('login', LoginView.as_view(template_name='users/login.html'),
-        name='login'),
+         name='login'),
     path('signup/', views.SignUp.as_view(template_name='users/signup.html'),
          name='signup'),
     path('password_reset/', PasswordResetView.as_view(
@@ -34,7 +36,7 @@ urlpatterns = [
         template_name='users/password_reset_complete.html'
     ), name='password_reset_complete'),
     path('logout/', LogoutView.as_view(template_name='users/logged_out.html'),
-        name='logout'),
+         name='logout'),
     path('password_change/', PasswordChangeView.as_view(
         template_name='users/password_change_form.html'),
         name='password_change'),
@@ -42,14 +44,15 @@ urlpatterns = [
         template_name='users/password_change_done.html'),
         name='password_change_done'),
     ##########################################################
-    path('', include('users.urls', namespace='users')),
     
+    path('', include('users.urls', namespace='users')),
+
 ]
 
 handler404 = 'core.views.page_not_found'
 handler403 = 'core.views.csrf_failure'
 
-#if settings.DEBUG:
+# if settings.DEBUG:
 #    urlpatterns += static(
 #        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 #    )

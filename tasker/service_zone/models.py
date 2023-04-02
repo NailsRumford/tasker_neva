@@ -1,6 +1,6 @@
 from django.db import models
 from branch.models import Branch
-from users.models import Technician
+from technicians.models import Technician
 
 
 class ServiceZone(models.Model):
@@ -30,8 +30,6 @@ class ServiceZone(models.Model):
     class Meta:
         verbose_name = 'зона обслуживания'
         verbose_name_plural = 'зоны обслуживания'
-
-
 
 
 class TechnicianZone (models.Model):
