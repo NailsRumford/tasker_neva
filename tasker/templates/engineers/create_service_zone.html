@@ -12,7 +12,7 @@
             
             function init() {
                 var myMap = new ymaps.Map("map", {
-                        center: [55.73, 37.75],
+                        center: {{branch_location}},
                         zoom: 10
                     }, {
                         searchControlProvider: 'yandex#search'
@@ -52,11 +52,11 @@
                     // Максимально допустимое количество вершин.
                     editorMaxPoints: 200,
                     // Цвет заливки.
-                    fillColor: '#00FF00',
+                    fillColor: '#00FF0099',
                     // Цвет обводки.
                     strokeColor: '#0000FF',
                     // Ширина обводки.
-                    strokeWidth: 5
+                    strokeWidth: 2
                 });
                 // Добавляем многоугольник на карту.
                 myMap.geoObjects.add(myPolygon);

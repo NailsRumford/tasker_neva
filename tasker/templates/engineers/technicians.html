@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block sidebarMenu %}
+  {% include 'engineers/includes/sidebarMenu.html' %}
+{% endblock sidebarMenu %}
+
+{% block content %}
+  {% for technician in technicians  %}
+    <div class="card" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">{{ technician.first_name }} {{ object.last_name }}</h5>
+        <p class="card-text">Отчество: {{ technician.middle_name }}</p>
+        <p class="card-text">Телефон: {{ technician.phone }}</p>
+        <p class="card-text">Филиал: {{ technician.branch }}</p>
+        <p class="card-text">Статус: {% if technician.is_active %}<span class="badge bg-success">Активен</span>{% else %}<span class="badge bg-danger">Неактивен</span>{% endif %}</p>
+        {% if technician.is_active %}
+        <a href="{% url 'engineers:technician_deactivate' technician.pk %}" class="btn btn-primary">Деактивировать</a>
+        {% else %}
+        <a href="{% url 'engineers:technician_activate' technician.pk %}" class="btn btn-primary">Активировать</a>
+        {% endif %}
+        <a href="{% url 'engineers:technician_detail' technician.pk %}" class="btn btn-primary">Подробнее</a>
+      </div>
+    </div>  
+    {% if not forloop.last %}
+      <hr />
+    {% endif %}
+  {% endfor %}
+  
+{% endblock content %}
