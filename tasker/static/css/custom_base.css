@@ -1,3 +1,4 @@
+
 .bd-placeholder-img {
     font-size: 1.125rem;
     text-anchor: middle;
@@ -47,4 +48,10 @@
     text-align: center;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
+  }
+
+  #map {
+    width: calc(100% - 60px);
+    height: 500px;
+    margin: 30px;
   }

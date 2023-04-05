@@ -21,7 +21,7 @@ class Engineer(models.Model):
         help_text='Выберите филиал, к которому относится инженер'
     )
     is_active = models.BooleanField(
-        default=True,
+        default=False,
         verbose_name='активен',
         help_text='Укажите, активена ли учетная запись инженер',
     )

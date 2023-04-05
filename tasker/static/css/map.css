@@ -1,0 +1,5 @@
+#map {
+    width: calc(100% - 15px);
+    height: 620px;
+    margin: 15px;
+  }

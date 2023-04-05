@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% block sidebarMenu %}
+  {% include 'engineers/includes/sidebarMenu.html' %}
+{% endblock sidebarMenu %}
+
+{% block content %}
+    <div class="row">
+      <div class="col-md-8 col-lg-9">
+        <div id="map"></div>
+        <script>
+            ymaps.ready(init);
+            
+            function init() {
+                var myMap = new ymaps.Map("map", {
+                        center: [55.73, 37.75],
+                        zoom: 10
+                    }, {
+                        searchControlProvider: 'yandex#search'
+                    });
+        
+                       
+                {% for zone in zones %}
+                    // Получаем координаты зоны из поля geopoints модели ServiceZone
+                    var coordinates{{zone.id}} = {{ zone.geopoints }};
+        
+                    // Создаем многоугольник на карте
+                    var Polygon{{zone.id}} = new ymaps.Polygon([coordinates{{zone.id}}], {
+                        hintContent: "{{ zone.name }}"
+                    }, {
+                        fillColor: '{{ zone.color }}',
+                        strokeColor: '#0000FF',
+                        strokeOpacity: 0.5,
+                        strokeWidth: 2
+                    });
+                    
+                    
+                    // Добавляем многоугольник на карту
+                    myMap.geoObjects.add(Polygon{{zone.id}});
+                {% endfor %}
+                // Создаем многоугольник без вершин.
+                {% if form.errors %}
+                  var coordinates = {{ form.data.geopoints}}
+                {% elif is_edit %}
+                  var coordinates = {{ form.initial.geopoints}}
+                {% else %}
+                  var coordinates = []
+                {% endif %}
+                
+                var myPolygon = new ymaps.Polygon([coordinates], {}, {
+                    // Курсор в режиме добавления новых вершин.
+                    editorDrawingCursor: "crosshair",
+                    // Максимально допустимое количество вершин.
+                    editorMaxPoints: 200,
+                    // Цвет заливки.
+                    fillColor: '#00FF00',
+                    // Цвет обводки.
+                    strokeColor: '#0000FF',
+                    // Ширина обводки.
+                    strokeWidth: 5
+                });
+                // Добавляем многоугольник на карту.
+                myMap.geoObjects.add(myPolygon);
+            
+                // В режиме добавления новых вершин меняем цвет обводки многоугольника.
+                var stateMonitor = new ymaps.Monitor(myPolygon.editor.state);
+                stateMonitor.add("drawing", function (newValue) {
+                    myPolygon.options.set("strokeColor", newValue ? '#FF0000' : '#0000FF');
+                });
+            
+                // Включаем режим редактирования с возможностью добавления новых вершин.
+                myPolygon.editor.startDrawing();
+        
+                document.getElementById('add_zone').addEventListener('click', function () {
+                    // Получаем координаты вершин многоугольника
+        
+        
+                    var coordinates = myPolygon.geometry.getCoordinates()[0];
+                    
+        
+                    // Заполняем скрытое поле формы с координатами многоугольника
+                    document.getElementById('id_geopoints').value = JSON.stringify(coordinates);
+                    
+                    // Отправляем данные на сервер
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', '{% url "engineers:create_service_zone" %}');
+                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            alert('Зона добавлена');
+                        }
+                    };
+                    xhr.send(new FormData(document.getElementById('polygon-form')));
+                });
+            }
+        </script>
+      </div>
+      <div class="col-md-4 col-lg-3 scrollable">
+        <p>
+        <div class="card">
+            <div class="card-header">       
+                {% if is_edit %}
+                Редактировать запись
+                {% else %}
+                Добавить запись
+                {% endif %}           
+            </div>
+            <div class="card-body">
+                {% if form.errors %}
+                
+                {% for field in form %}
+                  {% for error in field.errors %}            
+                    <div class="alert alert-danger">
+                      {{ error|escape }}
+                    </div>
+                  {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                  <div class="alert alert-danger">
+                    {{ error|escape }}
+                  </div>
+                {% endfor %}
+                {% endif %}
+              {% if is_edit %}
+                <form id="polygon-form" method="POST" action="{% url 'engineers:service_zone_edit' zone.id %}">
+              {% else %}
+                <form id="polygon-form" method="POST" action="{% url 'engineers:create_service_zone' %}">
+              {% endif %}
+                    {% csrf_token %}
+                    {% for field in form %}    
+                        <div class="form-group row my-3 p-3">
+                          <label for="{{field.id_for_label}}">
+                            {{ field.label }}
+                            {% if field.field.required %}                  
+                               <span class="required text-danger" >*</span>
+                            {% endif %}                
+                          </label>
+                          {{ field }}
+                          {% if field.help_text %}             
+                            <small id="{{ field.id_for_label }}-help" class="form-text text-muted">
+                              {{ field.help_text }}
+                            </small>
+                          {% endif %}                  
+                        </div> 
+                  {% endfor %}
+                <button id="add_zone">Сохранить зону</button>
+              </form>
+            </div>
+        </div>
+      </div>
+    </div>
+{% endblock content %}
