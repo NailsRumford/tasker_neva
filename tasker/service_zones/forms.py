@@ -2,7 +2,6 @@ from django import forms
 from .models import ServiceZone
 from shapely.geometry import Polygon
 from django.core.exceptions import ValidationError
-from functools import  partial
 
 
 def validate_geopoints(value, current_zone_id=None):
@@ -11,7 +10,8 @@ def validate_geopoints(value, current_zone_id=None):
     for zone in qs:
         if Polygon(eval(zone.geopoints)).intersects(polygon):
             raise ValidationError(f'Имеется пересечение с {zone.name}')
-      
+
+
 class ServiceZoneForm(forms.ModelForm):
     geopoints = forms.CharField(widget=forms.HiddenInput())
 

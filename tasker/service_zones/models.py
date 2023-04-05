@@ -5,6 +5,7 @@ import random
 from shapely.geometry import Polygon
 from django.core.exceptions import ValidationError
 
+
 class ServiceZone(models.Model):
     """
     Модель зоны обслуживания.
@@ -33,7 +34,7 @@ class ServiceZone(models.Model):
         verbose_name='геоточки',
         help_text='Геоточки, образующие область зоны обслуживания.'
     )
-    
+
     color = models.CharField(
         verbose_name='цвет',
         help_text='Уникальный цвет зоны обслуживания.',
@@ -43,15 +44,17 @@ class ServiceZone(models.Model):
     class Meta:
         verbose_name = 'зона обслуживания'
         verbose_name_plural = 'зоны обслуживания'
-    
+
     def save(self, *args, **kwargs):
         polygon = Polygon(eval(self.geopoints))
 
         for zone in ServiceZone.objects.exclude(id=self.id):
             if Polygon(eval(zone.geopoints)).intersects(polygon):
-                raise ValidationError(f'Зоны {self.name} и {zone.name} пересекаются')
+                raise ValidationError(
+                    f'Зоны {self.name} и {zone.name} пересекаются')
         if not self.color:
-            colors = ServiceZone.objects.filter(branch=self.branch).values_list('color', flat=True)
+            colors = ServiceZone.objects.filter(
+                branch=self.branch).values_list('color', flat=True)
             while True:
                 # генерируем случайный цвет в формате #RRGGBBAA
                 color = "#{:02X}{:02X}{:02X}{:02X}".format(
@@ -64,7 +67,7 @@ class ServiceZone(models.Model):
                     self.color = color
                     break
         super().save(*args, **kwargs)
-    
+
 
 class TechnicianZone (models.Model):
     technician = models.ForeignKey(
