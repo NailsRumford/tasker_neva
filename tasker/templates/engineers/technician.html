@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block sidebarMenu %}
+  {% include 'engineers/includes/sidebarMenu.html' %}
+{% endblock sidebarMenu %}
+
+{% block content %}
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ technician.first_name }} {{ object.last_name }}</h5>
+        <p class="card-text">Отчество: {{ technician.middle_name }}</p>
+        <p class="card-text">Телефон: {{ technician.phone }}</p>
+        <p class="card-text">Филиал: {{ technician.branch }}</p>
+        <p class="card-text">Зоны обслуживания:
+          {% for zone in  technician_zone %}
+            <p class="card-text">{{ zone.service_zone }} <a class="badge bg-danger" href="{% url 'engineers:technician_zone_delete' zone.id %}">удалить зону</a> </p>
+          {% endfor %}</p>
+        <p class="card-text">Статус: {% if technician.is_active %}<span class="badge bg-success">Активен</span>{% else %}<span class="badge bg-danger">Неактивен</span>{% endif %}</p>
+        {% if technician.is_active %}
+        <p href="{% url 'engineers:technician_deactivate' technician.pk %}" class="btn btn-primary">Деактивировать</p>
+        {% else %}
+        <p href="{% url 'engineers:technician_activate' technician.pk %}" class="btn btn-primary">Активировать</p>
+        {% endif %}
+        <p href="{% url 'engineers:technician_detail' technician.pk %}" class="btn btn-primary">Подробнее</p>
+      </div>
+      <div>
+        <div>
+          <h6>Добавить зону</h6>
+          <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Добавить</button>
+          </form>
+        </div>
+      </div>
+    </div> 
+{% endblock content %}

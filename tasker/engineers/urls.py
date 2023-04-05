@@ -16,5 +16,6 @@ urlpatterns = [
     path('technicians/', views.technicians , name='technicians'),
     path('technician/<int:technician_id>/detail/', views.technician_detail, name = 'technician_detail'),
     path('technician/<int:technician_id>/activate/', views.technician_activate, name = 'technician_activate'),
-    path('technician/<int:technician_id>/deactivate/', views.technician_deactivate, name = 'technician_deactivate')
+    path('technician/<int:technician_id>/deactivate/', views.technician_deactivate, name = 'technician_deactivate'),
+    path('technician_zone/<int:technician_zone_id>/delete/', views.technician_zone_delete, name = 'technician_zone_delete')
 ]

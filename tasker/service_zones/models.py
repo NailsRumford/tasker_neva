@@ -44,7 +44,10 @@ class ServiceZone(models.Model):
     class Meta:
         verbose_name = 'зона обслуживания'
         verbose_name_plural = 'зоны обслуживания'
-
+    
+    def __str__(self):
+        return self.name
+    
     def save(self, *args, **kwargs):
         polygon = Polygon(eval(self.geopoints))
 
