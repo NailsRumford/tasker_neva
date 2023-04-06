@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block sidebarMenu %}
+  {% include 'engineers/includes/sidebarMenu.html' %}
+{% endblock sidebarMenu %}
+
+{% block content %}
+<div class='row'>
+  <a href="{% url 'engineers:create_fire_alarm_object' %}" class="btn btn-primary">Создать объект обслуживания</a>
+</div>
+<div class="row">
+  {% for object in fire_alarm_objects %}
+  <div class="col-md-4 mb-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">{{ object.name }}</h5>
+        <p class="card-text">{{ object.address }}</p>
+        <p class="card-text">{{ object.service_organizations }}</p>
+        <p class="card-text">{{ object.frequency }}</p>
+        <p class="card-text">{{ object.last_service_date }}</p>
+        <p class="card-text">{{ object.next_service_date }}</p>
+        <a href="" class="btn btn-primary">Подробнее</a>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <p>Нет объектов для отображения.</p>
+  {% endfor %}
+</div>
+
+{% endblock %}

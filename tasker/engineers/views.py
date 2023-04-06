@@ -6,6 +6,8 @@ from service_zones.models import ServiceZone, TechnicianZone
 from core.decorators.user_decorators import engineer_required
 from django.db.models import Q
 from technicians.models import Technician
+from fire_alarm_objects.models import FireAlarmObject
+from fire_alarm_objects.forms import FireAlarmObjectForm
 
 
 @engineer_required
@@ -83,6 +85,7 @@ def technicians(request):
     context = {'technicians': technicians}
     return render(request, template, context)
 
+
 @engineer_required
 def technician_activate(request, technician_id):
     technician = get_object_or_404(Technician, id=technician_id)
@@ -90,12 +93,14 @@ def technician_activate(request, technician_id):
     technician.save()
     return redirect('engineers:technicians')
 
+
 @engineer_required
 def technician_deactivate(request, technician_id):
     technician = get_object_or_404(Technician, id=technician_id)
     technician.is_active = False
     technician.save()
     return redirect('engineers:technicians')
+
 
 @engineer_required
 def assign_zones(request, technician_id):
@@ -108,6 +113,7 @@ def assign_zones(request, technician_id):
     else:
         form = AssignZonesForm(technician)
     return render(request, 'assign_zones.html', {'form': form, 'technician': technician})
+
 
 @engineer_required
 def technician_detail(request, technician_id):
@@ -122,10 +128,34 @@ def technician_detail(request, technician_id):
     return render(request, 'engineers/technician.html', {'technician': technician,
                                                          'form': form,
                                                          'technician_zone': technician_zones})
-    
+
+
 @engineer_required
 def technician_zone_delete(request, technician_zone_id):
-    technician_zone = TechnicianZone.objects.select_related('technician').get(id=technician_zone_id)
+    technician_zone = TechnicianZone.objects.select_related(
+        'technician').get(id=technician_zone_id)
     technician_id = technician_zone.technician.id
     technician_zone.delete()
     return redirect('engineers:technician_detail', technician_id)
+
+
+@engineer_required
+def fire_alarm_objects(request):
+    fire_alarm_objects = FireAlarmObject.objects.all()
+    context = {'fire_alarm_objects': fire_alarm_objects}
+    template = 'engineers/fire_alarm_objects.html'
+    return render(request, template, context)
+
+
+def create_fire_alarm_object(request):
+    engineer = get_object_or_404(Engineer, user=request.user)
+    fire_alarm_object_form = FireAlarmObjectForm(engineer, request.POST or None)
+    
+    if fire_alarm_object_form.is_valid():
+        fire_alarm_object = fire_alarm_object_form.save(commit=False)
+        fire_alarm_object.branch = engineer.branch
+        fire_alarm_object.save()
+        return redirect ('engineers:fire_alarm_objects')
+    template = 'engineers/create_fire_alarm_object.html'
+    context = {'fire_alarm_object_form': fire_alarm_object_form}
+    return render(request, template, context)

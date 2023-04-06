@@ -44,6 +44,9 @@ INSTALLED_APPS = [
     'service_zones.apps.ServiceZonesConfig',
     'technicians.apps.TechniciansConfig',
     'engineers.apps.EngineersConfig',
+    'fire_alarm_objects.apps.FireAlarmObjectsConfig',
+    'service_оrganizations.apps.ServiceОrganizationsConfig',
+   
 ]
 
 MIDDLEWARE = [

@@ -7,6 +7,7 @@ from technicians.models import Technician
 
 User = get_user_model()
 
+branches = Branch.objects.all()
 
 ROLE_CHOICES = (
     ('engineer', 'Инженер'),
