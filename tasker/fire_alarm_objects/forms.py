@@ -1,5 +1,5 @@
 from django import forms
-from .models import FireAlarmObject
+from .models import FireAlarmObject, FireAlarmObjectService
 from dadata import Dadata
 from .models import Address
 from tasker.settings import DADATA_SECRET, DADATA_TOKEN
@@ -27,11 +27,11 @@ class FireAlarmObjectForm(forms.ModelForm):
                   'address',
                   'service_organizations',
                   'frequency',
-                  'service_zone',
                   'last_service_date')
 
     def __init__(self, engineer=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['last_service_date'].widget.attrs['placeholder'] = ('дд.мм.гггг')
 
 
     def clean_address(self):
@@ -55,3 +55,8 @@ class FireAlarmObjectForm(forms.ModelForm):
             latitude=latitude,
             longitude=longitude)
         return address_object
+
+class FireAlarmObjectServiceForm(forms.ModelForm):
+    class Meta:
+        model = FireAlarmObjectService
+        fields = ('service_journal_photo', 'control_panel_photo', 'comment')

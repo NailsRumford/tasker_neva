@@ -1,0 +1,35 @@
+{% load user_filters %}
+<div id="map" style="width: 100%;"></div>
+
+<script>
+    ymaps.ready(init);
+
+    function init() {
+        var myMap = new ymaps.Map("map", {
+            center: {{branch_location}},
+            zoom: 10
+        }, {
+            searchControlProvider: 'yandex#search'
+        });
+
+        {% for object in fire_alarm_objects %}
+        template{{object.id}} = ymaps.templateLayoutFactory.createClass(
+            '{{object|add_object_balloon|safe}}', {
+        });
+        var placemark{{object.id}} = new ymaps.Placemark(
+            {{ object.address.get_geopoint }},
+            {
+                name: 'Считаем'
+            }, {
+                balloonContentLayout: template{{object.id}},
+            });
+
+
+        {% endfor %}
+
+        myMap.geoObjects
+            {% for object in fire_alarm_objects %}
+            .add(placemark{{object.id}})
+            {% endfor %};
+    }
+</script>

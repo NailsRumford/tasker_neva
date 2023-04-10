@@ -28,5 +28,8 @@ urlpatterns = [
     path('fire_alarm_objects/', views.fire_alarm_objects,
          name='fire_alarm_objects'),
     path('create_fire_alarm_object', views.create_fire_alarm_object,
-         name='create_fire_alarm_object')
+         name='create_fire_alarm_object'),
+    path('fire_alarm_object/<int:object_id>/delete',
+         views.fire_alarm_object_delete, name='fire_alarm_object_delete'),
+    path('fire_alarm_object/<int:object_id>/detasil', views.fire_alarm_object_detail, name = 'fire_alarm_object_detail')
 ]

@@ -9,6 +9,7 @@ class Technician(models.Model):
         User,
         on_delete=models.CASCADE,
         verbose_name='пользователь',
+        related_name='technician',
         help_text='Пользователь, к которому относится',
     )
     branch = models.ForeignKey(

@@ -1,0 +1,12 @@
+<div class="card">
+  <div class="container">
+    <h4><b>{{ object.name }}</b></h4>
+    <p>{{ object.address.address }}</p> 
+    <p>{{ object.frequency }} обслуживание</p>
+    <p>Следующее обслуживание: {{ object.next_service_date }}</p>
+    <a href="{% url 'technicians:make_service' object.id %}" class="btn btn-primary">Перейти к объекту</a>
+  </div>
+</div>
+
+
+

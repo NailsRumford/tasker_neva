@@ -8,6 +8,7 @@ from django.db.models import Q
 from technicians.models import Technician
 from fire_alarm_objects.models import FireAlarmObject
 from fire_alarm_objects.forms import FireAlarmObjectForm
+from shapely.geometry import Polygon
 
 
 @engineer_required
@@ -147,15 +148,34 @@ def fire_alarm_objects(request):
     return render(request, template, context)
 
 
+@engineer_required
 def create_fire_alarm_object(request):
     engineer = get_object_or_404(Engineer, user=request.user)
-    fire_alarm_object_form = FireAlarmObjectForm(engineer, request.POST or None)
-    
+    fire_alarm_object_form = FireAlarmObjectForm(
+        engineer, request.POST or None)
+
     if fire_alarm_object_form.is_valid():
         fire_alarm_object = fire_alarm_object_form.save(commit=False)
         fire_alarm_object.branch = engineer.branch
+        fire_alarm_object.auto_add_service_zone()
         fire_alarm_object.save()
-        return redirect ('engineers:fire_alarm_objects')
+        return redirect('engineers:fire_alarm_objects')
     template = 'engineers/create_fire_alarm_object.html'
     context = {'fire_alarm_object_form': fire_alarm_object_form}
+    return render(request, template, context)
+
+
+@engineer_required
+def fire_alarm_object_delete(request, object_id):
+    engineer = get_object_or_404(Engineer, user=request.user)
+    fire_alarm_object = get_object_or_404(FireAlarmObject, id=object_id)
+    fire_alarm_object.delete()
+    return redirect('engineers:fire_alarm_objects')
+
+
+def fire_alarm_object_detail(request, object_id):
+    engineer = get_object_or_404(Engineer, user=request.user)
+    fire_alarm_object = get_object_or_404(FireAlarmObject, id= object_id)
+    template = 'engineers/fire_alarm_object_detail.html'
+    context = {'object': fire_alarm_object}
     return render(request, template, context)

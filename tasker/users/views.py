@@ -14,7 +14,7 @@ def division_users(request):
     if Engineer.objects.filter(user=user).exists():
         success_url = reverse_lazy('engineers:index')
     elif Technician.objects.filter(user=user).exists():
-        success_url = reverse_lazy('tech_dashboard')
+        success_url = reverse_lazy('technicians:index')
     else:
         success_url = reverse_lazy('users:account_not_confirmed')
     return redirect(success_url)

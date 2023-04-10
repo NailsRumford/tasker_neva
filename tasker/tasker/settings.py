@@ -155,3 +155,11 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 # Токены для DADATA
 DADATA_TOKEN = '158debbbb6e04fe4c827e77b3e420f0b2b305e73'
 DADATA_SECRET = 'cdec8ebd57159ddf44189a5f00f2a60eee4fd84b'
+
+
+# кеш
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
