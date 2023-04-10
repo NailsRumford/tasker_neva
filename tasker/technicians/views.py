@@ -17,9 +17,9 @@ def index(request):
         service_zone__technicians__technician_id=technician.id)
     template = "technicians/index.html"
     form = FireAlarmObjectServiceForm()
-    context = {'fire_alarm_objects': fire_alarm_objects,
+    context = {'objects': fire_alarm_objects,
                'branch_location': branch_location,
-               'mobi':True}
+               'mobi': True}
     return render(request, template, context)
 
 
@@ -40,9 +40,10 @@ def fire_alarm_objects(request, to_date):
     return render(request, template, context)
 
 
-def make_service(request, object_id):
+def fire_alarm_object_service_create(request, object_id):
     form = FireAlarmObjectServiceForm(request.POST or None,
                                       files=request.FILES or None,)
+    template = "technicians/fire_alarm_object_service_create.html"
     if form.is_valid():
         fire_alarm_object = get_object_or_404(FireAlarmObject, id=object_id)
         technician = get_object_or_404(Technician, user=request.user)
@@ -51,4 +52,8 @@ def make_service(request, object_id):
         fire_alarm_object_service.technician = technician
         fire_alarm_object_service.save()
         return redirect('technicians:index')
-    return redirect('technicians:index')
+    fire_alarm_object = get_object_or_404(FireAlarmObject, id=object_id)
+    technician = get_object_or_404(Technician, user=request.user)
+    context = {'object': fire_alarm_object,
+               'form': form}
+    return render(request, template, context)

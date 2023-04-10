@@ -67,7 +67,7 @@
                 <p class="card-text"><h6>Произвести обслуживания до:</h6> {{ object.next_service_date }}</p>
               </div>
               <div class="d-grid gap-3">
-                <button class="btn btn-success btn-sm" type="button">Сделать обслуживать</button>
+                <a href="{% url 'technicians:fire_alarm_object_service_create' object.id %}" class="btn btn-success btn-sm">Сделать обслуживать</a>
                 <button class="btn btn-danger btn-sm" type="button">Обслуживание невозможно</button>
                 <button class="btn btn-primary btn-sm" type="button">Карточка объекта</button>
               </div>

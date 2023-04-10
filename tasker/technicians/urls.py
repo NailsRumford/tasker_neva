@@ -9,5 +9,5 @@ urlpatterns = [
     path('', views.index,
          name='index'),
     path('fire_alarm_objects/<int:to_date>/show/', views.fire_alarm_objects, name ='fire_alarm_objects'),
-    path('make_service/<int:object_id>/create/', views.make_service , name='make_service'),
+    path('fire_alarm_object_service/<int:object_id>/create/', views.fire_alarm_object_service_create , name='fire_alarm_object_service_create'),
 ]

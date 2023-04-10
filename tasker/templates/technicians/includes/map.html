@@ -12,23 +12,34 @@
             searchControlProvider: 'yandex#search'
         });
 
-        {% for object in fire_alarm_objects %}
-        template{{object.id}} = ymaps.templateLayoutFactory.createClass(
-            '{{object|add_object_balloon|safe}}', {
-        });
+        {% for object in objects %}
+
         var placemark{{object.id}} = new ymaps.Placemark(
-            {{ object.address.get_geopoint }},
-            {
-                name: 'Считаем'
-            }, {
-                balloonContentLayout: template{{object.id}},
+            {{ object.address.get_geopoint }}, {
+                balloonContentHeader: '<a href = "#">{{object.name}}</a><br>',
+                balloonContentBody: 
+                '<div class = "row">'+
+                '<div class="container">'+
+                '<p class="card-text"><h6>Обслуживающая организация:</h6> {{ object.service_organizations }}</p>'+
+                '<p class="card-text"><h6>Переодичность:</h6> {{ object.frequency }}</p>'+
+                '<p class="card-text"><h6>Произвести обслуживания до:</h6> {{ object.next_service_date }}</p>'+
+                '</div>'+
+                '</div>',
+                balloonContentFooter: '<div class="d-grid gap-3">'+
+                    '<button class="btn btn-warning btn-sm" type="button">Построить маршрут</button>'+
+                    '<button class="btn btn-primary btn-sm" type="button">Карточка объекта</button>'+
+                    '</div>',
+                hintContent: '{{object.name}}'
+            },{
+                preset: 'islands#dotIcon',
+                iconColor: '{{object|map_icon_color}}'
             });
 
 
         {% endfor %}
 
         myMap.geoObjects
-            {% for object in fire_alarm_objects %}
+            {% for object in objects %}
             .add(placemark{{object.id}})
             {% endfor %};
     }
