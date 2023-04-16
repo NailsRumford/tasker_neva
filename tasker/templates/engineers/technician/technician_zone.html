@@ -1,0 +1,48 @@
+{% load thumbnail %}
+<div class="accordion" id="accordion-technician{{technician.id}}-zone">
+    <div class="card mb-1 mt-1" >
+      <div class="card-body"  data-bs-toggle="collapse" data-bs-target="#collapse-technician{{technician.id}}-zone"  aria-controls="collapse-technician{{technician.id}}-zone">
+            <h5>Зоны</h5> всего зон:{{service_zones.count}} всего объектов:{{fire_alarm_objects.count }}
+      </div>
+      <div id="collapse-technician{{technician.id}}-zone" class="accordion-collapse collapse" aria-labelledby="heading-technician{{technician.id}}-zone">
+        <div class="card-body">
+          {% for zone in service_zones %}
+                <h6>{{ zone.name }}</h6>
+                  <p>Количество объектов: {{ zone.fire_alarm_objects.count }}</p>
+                  <p>Ежемесячно: {{ zone.get_monthly_service_count }}</p>
+                  <p>Ежеквартально: {{ zone.get_quarterly_service_count }}</p>
+                {% endfor %}
+                </p>
+                <div class="d-grid gap-2 d-md-block">
+                    <a class="btn btn-primary btn-sm" data-bs-toggle="collapse" href="#collapseZoneAdd-technician{{technician.id}}-zone" role="button" aria-expanded="false" aria-controls="collapseZoneAdd-technician{{technician.id}}-zone">
+                        Добавить зону
+                    </a>
+                    <a class="btn btn-danger btn-sm" data-bs-toggle="collapse" href="#collapseZoneDelet-technician{{technician.id}}-zone" role="button" aria-expanded="false" aria-controls="collapseZoneDelet-technician{{technician.id}}-zone">
+                        Удалить зону
+                    </a>
+                </div>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="collapse mb-2" id="collapseZoneDelet-technician{{technician.id}}-zone">
+  <div class="card card-body">
+    <p class="card-text">Зоны обслуживания:
+      {% for zone in  technician_zone %}
+        <p class="card-text">{{ zone.service_zone }} <a class="badge bg-danger" href="{% url 'engineers:technician_zone_delete' zone.id %}">удалить зону</a> </p>
+      {% endfor %}
+    </p>
+  </div>
+</div>
+<div class="collapse mb-2" id="collapseZoneAdd-technician{{technician.id}}-zone">
+  <div class="card card-body">
+    <p class="card-text">Зоны обслуживания:
+      <h6>Добавить зону</h6>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Добавить</button>
+      </form>
+    </p>
+  </div>
+</div>

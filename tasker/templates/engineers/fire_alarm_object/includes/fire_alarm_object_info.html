@@ -1,0 +1,70 @@
+{% load thumbnail %}
+<div class="accordion" id="accordion-fire_alarm_object{{fire_alarm_object.id}}-info">
+    <div class="card mb-1 mt-1" >
+      <div class="card-body"  data-bs-toggle="collapse" data-bs-target="#collapse-fire_alarm_object{{fire_alarm_object.id}}-info"  aria-controls="collapse-fire_alarm_object{{fire_alarm_object.id}}-info">
+        <div class ='row'>  
+              <div class = 'col-6'>
+                <h5>{{fire_alarm_object}}</h5><p>
+                Адресс: {{fire_alarm_object.address}}
+              </div>
+              <div class = 'col-6'>
+                {% if fire_alarm_object.photo %}
+                {% thumbnail fire_alarm_object.photo "70x70" crop="center" as im %}
+                  <a href="{{ fire_alarm_object.photo.url }}"><img class="img-thumbnail float-end" src="{{ im.url }}"></a>
+                {% endthumbnail %}
+                {% endif %} 
+              </div>
+        </div>
+      </div>
+      <div id="collapse-fire_alarm_object{{fire_alarm_object.id}}-info" class="accordion-collapse collapse" aria-labelledby="heading-fire_alarm_object{{fire_alarm_object.id}}-info" data-bs-parent="#accordion-fire_alarm_object{{fire_alarm_object.id}}-info">
+        <div class="card-body">
+          <p class="card-text">Обслуживающая организация: {{ fire_alarm_object.service_organizations }}</p>
+          <p class="card-text">Переодичность: {{ fire_alarm_object.frequency }}</p>
+          <p class="card-text">Зона обслуживания: {{ fire_alarm_object.service_zone }}</p>
+          <p class="card-text">Последняя дата обслуживания: {{ fire_alarm_object.last_service_date }}</p>
+          <p class="card-text">Следующая дата обслуживания: {{ fire_alarm_object.next_service_date }}</p>
+          <div class="d-grid gap-2 gap-2 d-md-block">   
+            {% if show_delete %}
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                Удалить объект
+              </button>
+              <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="staticBackdropLabel">Вы уверены что хотите удалить {{ fire_alarm_object.name }}</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                      <a href="{% url 'engineers:create_fire_alarm_object' %}" type ="bottom" class="btn btn-primary">Удалить</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% else %}
+              <a href="{% url 'engineers:fire_alarm_object_detail' fire_alarm_object.id %}">
+                <button class="btn btn-primary">
+                  Подробнее
+                </button>
+              </a>
+            {% endif %}
+            {% if add_zone2fire_alarm_object_form %}
+                <a class="btn btn-primary " data-bs-toggle="collapse" href="#collapse-add_zone2fire_alarm_object_form" role="button" aria-expanded="false" aria-controls="collapse-add_zone2fire_alarm_object_form">
+                    Изменить зону
+                </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="collapse mb-2" id="collapse-add_zone2fire_alarm_object_form">
+  <div class="card card-body">
+    <form id="add_zone2fire_alarm_object_form" method="POST" enctype="multipart/form-data" action="{% url 'engineers:fire_alarm_object_detail' fire_alarm_object.id %}">
+      {% csrf_token %}
+      {{ add_zone2fire_alarm_object_form.as_p }}
+      <button id="add_zone2fire_alarm_object_form" class="btn btn-success btn-sm">Сохранить зону</button>
+    </form>
+  </div>
+</div>

@@ -27,9 +27,12 @@ urlpatterns = [
          views.technician_zone_delete, name='technician_zone_delete'),
     path('fire_alarm_objects/', views.fire_alarm_objects,
          name='fire_alarm_objects'),
+    path('fire_alarm_objects/<int:to_date>/', views.fire_alarm_objects_filter,
+         name='fire_alarm_objects_filter'),
     path('create_fire_alarm_object', views.create_fire_alarm_object,
          name='create_fire_alarm_object'),
-    path('fire_alarm_object/<int:object_id>/delete',
+    path('fire_alarm_object/<int:object_id>/delete/',
          views.fire_alarm_object_delete, name='fire_alarm_object_delete'),
-    path('fire_alarm_object/<int:object_id>/detasil', views.fire_alarm_object_detail, name = 'fire_alarm_object_detail')
+    path('fire_alarm_object/<int:object_id>/detail/', views.fire_alarm_object_detail, name = 'fire_alarm_object_detail'),
+    path('import_csv/', views.import_csv, name ='import_csv')
 ]

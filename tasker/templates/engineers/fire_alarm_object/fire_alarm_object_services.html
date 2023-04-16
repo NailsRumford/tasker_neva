@@ -1,0 +1,26 @@
+{% load thumbnail %}
+{% load user_filters %}
+<div class="accordion" id="accordion-fire_alarm_object_services">
+  <div class="card mb-1 mt-1" >
+    <div class="card-body"  data-bs-toggle="collapse" data-bs-target="#collapse-fire_alarm_object_services"  aria-controls="collapse-fire_alarm_object_services">
+          <h5>Журнал обслуживания</h5> всего записей:{{fire_alarm_object_services.count }} 
+    </div>
+    <div id="collapse-fire_alarm_object_services" class="accordion-collapse collapse" aria-labelledby="heading-fire_alarm_object_services">
+      <div class="card-body">
+        <div class='card-body'style='overflow:auto; max-height: 500px;'>
+            {% for fire_alarm_object_service in fire_alarm_object_services %}
+              {% include 'engineers/fire_alarm_object/includes/fire_alarm_object_service.html' %}
+            {% empty %}
+              <p>Нет объектов для отображения.</p>
+            {% endfor %}
+        </div>    
+      </div>
+    </div>
+  </div>  
+</div>
+
+<div class="collapse mb-2" id="collapseZoneDelet-technician{{technician.id}}-fire_alarm_objects">
+</div>
+
+<div class="collapse mb-2" id="collapseZoneAdd-technician{{technician.id}}-fire_alarm_objects">
+</div>

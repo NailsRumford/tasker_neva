@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block sidebarMenu %}
+  {% include 'technicians/includes/sidebarMenu.html' %}
+{% endblock sidebarMenu %}
+{% load thumbnail %}
+{% block content %}
+<div class="container">
+    <div class = 'row'>
+      <div class='container'>
+        <p class="card-text"><h5>{{ object.name }}</h5></p>
+        <p class="card-text"><h6>{{ object.address}}</h6></p>
+        <p class="card-text"><h6>Обслуживающая организация:</h6> {{ object.service_organizations }}</p>
+        <p class="card-text"><h6>Переодичность:</h6> {{ object.frequency }}</p>
+        <p class="card-text"><h6>Произвести обслуживания до:</h6> {{ object.next_service_date }}</p>
+      </div>
+      <div class="card">
+        <div class="card-header">       
+            {% if is_edit %}
+              Редактировать тикет о невозможности обслуживания
+            {% else %}
+              Создать тикет о невозможности обслуживания
+            {% endif %}           
+        </div>
+        <div class="card-body">
+          {% if form.errors %}
+            {% for field in form %}
+              {% for error in field.errors %}            
+                <div class="alert alert-danger">
+                    {{ error|escape }}
+                </div>
+              {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+              <div class="alert alert-danger">
+                {{ error|escape }}
+              </div>
+            {% endfor %}
+          {% endif %}
+          {% if is_edit %}
+            <form id="failed_service-form" method="POST" enctype="multipart/form-data" action="{% url 'technicians:failed_service_create' object.id %}">
+          {% else %}
+            <form id="failed_service-form" method="POST" enctype="multipart/form-data" action="{% url 'technicians:failed_service_create' object.id%}">
+          {% endif %}
+          {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group row my-3 p-3">
+                      <label for="{{field.id_for_label}}">
+                        {{ field.label }}
+                        {% if field.field.required %}                  
+                          <span class="required text-danger" >*</span>
+                        {% endif %}                
+                      </label>
+                      {{ field }}
+                      {% if field.help_text %}             
+                        <small id="{{ field.id_for_label }}-help" class="form-text text-muted">
+                          {{ field.help_text }}
+                        </small>
+                      {% endif %}                
+                    </div>
+                {% endfor %}
+              <div class ='container'>
+                <button id="failed_service-form" class="btn btn-success btn-sm">Создать тикет о невозможности обслуживания</button>
+                <a href="{% url 'technicians:index' %}" class="btn btn-primary btn-sm">Отмена</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+</div>
+{% endblock content %}

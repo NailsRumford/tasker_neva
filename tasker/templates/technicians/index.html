@@ -12,30 +12,26 @@
         Карта
       </button>
       <div class="collapse" id="collapseMap">
-        <div class="card card-body">
-          <div class="row">
-            {% include 'technicians/includes/map.html' %}
-          </div>
-        </div>
+          {% include 'technicians/includes/map.html' %}
       </div>
     </div>
     <div class="row row-cols-2">
       <div class="col">
-        <button type="button" class="btn btn-secondary btn-sm p-1 m-1 w-100">до конца месяца</button>
+        <a href="{% url 'technicians:fire_alarm_objects' days_left_in_month%}" class="btn btn-secondary btn-sm p-1 m-1 w-100">до конца месяца</a>
       </div>
       <div class="col">
-        <button type="button" class="btn btn-danger btn-sm p-1 m-1 w-100">менее 3 дней</button>
+        <a href="{% url 'technicians:fire_alarm_objects' 3 %}" class="btn btn-danger btn-sm p-1 m-1 w-100">менее 3 дней</a>
       </div>
       <div class="col">
-        <button type="button" class="btn btn-warning btn-sm p-1 m-1 w-100">менее 6 дней</button>
+        <a href="{% url 'technicians:fire_alarm_objects' 6 %}" class="btn btn-warning btn-sm p-1 m-1 w-100">менее 6 дней</a>
       </div>
       <div class="col">
-        <button type="button" class="btn btn-primary btn-sm p-1 m-1 w-100">менее 9 дней</button>
+        <a href="{% url 'technicians:fire_alarm_objects' 9 %}" class="btn btn-primary btn-sm p-1 m-1 w-100">менее 9 дней</a>
       </div>
     </div>
     <div class="row row-cols-1">
       <div class="col">
-        <button type="button" class="btn btn-success btn-sm p-1 m-1 w-100">Все объекты</button>
+        <a href="{% url 'technicians:index' %}" class="btn btn-success btn-sm p-1 m-1 w-100">Все объекты</a>
       </div>
     </div>
   </div>
@@ -68,8 +64,8 @@
               </div>
               <div class="d-grid gap-3">
                 <a href="{% url 'technicians:fire_alarm_object_service_create' object.id %}" class="btn btn-success btn-sm">Сделать обслуживать</a>
-                <button class="btn btn-danger btn-sm" type="button">Обслуживание невозможно</button>
-                <button class="btn btn-primary btn-sm" type="button">Карточка объекта</button>
+                <a href="{% url 'technicians:failed_service_create' object.id %}" class="btn btn-danger btn-sm">Обслуживание невозможно</a>
+                <a href="{% url 'technicians:fire_alarm_object_service_detail' object.id %}" class="btn btn-primary btn-sm">Карточка объекта</a>
               </div>
             </div>
           </div>

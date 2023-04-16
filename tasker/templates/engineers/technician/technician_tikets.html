@@ -1,0 +1,34 @@
+{% load thumbnail %}
+{% load user_filters %}
+<div class="accordion" id="accordion-technician{{technician.id}}-tikets">
+    <div class="card mb-1 mt-1" >
+      <div class="card-body"  data-bs-toggle="collapse" data-bs-target="#collapse-technician{{technician.id}}-tikets"  aria-controls="collapse-technician{{technician.id}}-tikets">
+            <h5>Тикеты</h5>
+      </div>
+      <div id="collapse-technician{{technician.id}}-tikets" class="accordion-collapse collapse" aria-labelledby="heading-technician{{technician.id}}-tikets">
+        <div class="card-body">
+          тут должны быть тикеты
+        </div>
+      </div>
+</div>
+<div class="collapse mb-2" id="collapseZoneDelet-technician{{technician.id}}-tikets">
+  <div class="card card-body">
+    <p class="card-text">Зоны обслуживания:
+      {% for zone in  technician_zone %}
+        <p class="card-text">{{ zone.service_zone }} <a class="badge bg-danger" href="{% url 'engineers:technician_zone_delete' zone.id %}">удалить зону</a> </p>
+      {% endfor %}
+    </p>
+  </div>
+</div>
+<div class="collapse mb-2" id="collapseZoneAdd-technician{{technician.id}}-tikets">
+  <div class="card card-body">
+    <p class="card-text">Зоны обслуживания:
+      <h6>Добавить зону</h6>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Добавить</button>
+      </form>
+    </p>
+  </div>
+</div>

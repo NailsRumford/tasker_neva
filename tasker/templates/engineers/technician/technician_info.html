@@ -1,0 +1,54 @@
+{% load thumbnail %}
+<div class="accordion" id="accordion-technician{{technician.id}}-info">
+    <div class="card mb-1 mt-1" >
+      <div class="card-body"  data-bs-toggle="collapse" data-bs-target="#collapse-technician{{technician.id}}-info"  aria-controls="collapse-technician{{technician.id}}-info">
+        <div class ='row'>  
+          <div class="col-md-6">
+            <p class="card-text">{% if technician.is_active %}<span class="badge bg-success">                    </span>{% else %}<span class="badge bg-danger">                    </span>{% endif %}</p>
+            <h5>{{technician}}</h5>
+          </div>
+          <div class="col-md-6">
+            {% if technician.photo %}
+            {% thumbnail technician.photo "90x90" crop="center" as im %}
+              <a href="{{ technician.photo.url }}"><img class="img-thumbnail float-end" src="{{ im.url }}"></a>
+            {% endthumbnail %}
+            {% endif %}  
+          </div>
+        </div>
+      </div>
+      <div id="collapse-technician{{technician.id}}-info" class="accordion-collapse collapse" aria-labelledby="heading-technician{{technician.id}}-info" data-bs-parent="#accordion-technician{{technician.id}}-info">
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <div class="card-body">
+              <p class="card-text">Телефон: {{ technician.phone }}</p>
+              <p class="card-text">Филиал: {{ technician.branch }}</p>
+              <p class="card-text">Всего объектов: {{fire_alarm_objects.count}}</p>
+              <p class="card-text">Зоны обслуживания:
+                  {% for zone in  service_zones %}
+                    {{ zone }},
+                  {% endfor %}
+              </p>
+              <div class="d-grid gap-2 d-md-block">
+                {% if technician.is_active %}
+                  <a href="{% url 'engineers:technician_deactivate' technician.pk %}" class="btn btn-danger btn-sm">Деактивировать</a>
+                {% else %}
+                  <a href="{% url 'engineers:technician_activate' technician.pk %}" class="btn btn-success btn-sm">Активировать</a>
+                {% endif %}
+                {% if not show_info %}
+                  <a href="{% url 'engineers:technician_detail' technician.pk %}" class="btn btn-primary btn-sm">Подробнее</a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% if show_map %}
+            <div class="col-md-6 col-sm-12">
+              <div class="card-body">
+                {% include 'engineers/technician/technician_map.html' %}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+</div>
+

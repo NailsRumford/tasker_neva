@@ -13,7 +13,7 @@ from django.urls import reverse_lazy
 from django.conf import settings
 
 urlpatterns = [
-   path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('engineers/', include('engineers.urls', namespace='engineers')),
     path('technicians/', include('technicians.urls', namespace='technicians.urls')),
 

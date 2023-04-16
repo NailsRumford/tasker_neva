@@ -33,3 +33,10 @@ def map_icon_color(object: FireAlarmObject):
         return '#0000FF'
     else:
         return '#808080'
+    
+@register.filter    
+def get_monthly_service_count(objects):
+    return objects.filter(frequency='Ежемесячно').count()
+@register.filter
+def get_quarterly_service_count(objects):
+    return objects.filter(frequency='Ежеквартально').count()

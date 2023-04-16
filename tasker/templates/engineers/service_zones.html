@@ -2,39 +2,11 @@
 {% block sidebarMenu %}
   {% include 'engineers/includes/sidebarMenu.html' %}
 {% endblock sidebarMenu %}
-
+{% load user_filters %}
 {% block content %}
 <div class="row">
     <div class="col-md-8 col-lg-9">
-      <div id="map"></div>
-      <script type="text/javascript">
-          ymaps.ready(init);
-      
-          function init() {
-              var myMap = new ymaps.Map("map", {
-                  center: {{branch_location}},
-                  zoom: 10
-              });
-      
-              {% for zone in zones %}
-                  // Получаем координаты зоны из поля geopoints модели ServiceZone
-                  var coordinates = {{ zone.geopoints }};
-      
-                  // Создаем многоугольник на карте
-                  var myPolygon = new ymaps.Polygon([coordinates], {
-                      hintContent: "{{ zone.name }}"
-                  }, {
-                      fillColor: '{{ zone.color}}',
-                      strokeColor: '#0000FF',
-                      strokeOpacity: 0.5,
-                      strokeWidth: 2
-                  });
-      
-                  // Добавляем многоугольник на карту
-                  myMap.geoObjects.add(myPolygon);
-              {% endfor %}
-          }
-      </script>
+      {% include 'engineers/includes/base_map.html'%}
     </div>
     <div class="col-md-4 col-lg-3 scrollable">
       <div class="container">  
@@ -70,5 +42,5 @@
       {% endfor%}
     </div>
 </div>
-<div id="map" style="width: 700px; height: 500px"></div>
+
 {% endblock content %}

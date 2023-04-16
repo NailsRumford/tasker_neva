@@ -4,25 +4,11 @@
 {% endblock sidebarMenu %}
 
 {% block content %}
-  {% for technician in technicians  %}
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">{{ technician.first_name }} {{ object.last_name }}</h5>
-        <p class="card-text">Отчество: {{ technician.middle_name }}</p>
-        <p class="card-text">Телефон: {{ technician.phone }}</p>
-        <p class="card-text">Филиал: {{ technician.branch }}</p>
-        <p class="card-text">Статус: {% if technician.is_active %}<span class="badge bg-success">Активен</span>{% else %}<span class="badge bg-danger">Неактивен</span>{% endif %}</p>
-        {% if technician.is_active %}
-        <a href="{% url 'engineers:technician_deactivate' technician.pk %}" class="btn btn-primary">Деактивировать</a>
-        {% else %}
-        <a href="{% url 'engineers:technician_activate' technician.pk %}" class="btn btn-primary">Активировать</a>
-        {% endif %}
-        <a href="{% url 'engineers:technician_detail' technician.pk %}" class="btn btn-primary">Подробнее</a>
-      </div>
-    </div>  
-    {% if not forloop.last %}
-      <hr />
-    {% endif %}
-  {% endfor %}
-  
+
+      {% for technician_obj in technicians_obj_list %}
+        {% with technician=technician_obj.technician service_zones=technician_obj.service_zones fire_alarm_objects=technician_obj.fire_alarm_objects branch_location=technician_obj.branch_location%}
+          {% include 'engineers/technician/technician_info.html' %}
+        {% endwith %}
+      {% endfor %}
+
 {% endblock content %}

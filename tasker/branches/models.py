@@ -35,6 +35,6 @@ class Branch(models.Model):
         Возвращает координаты филиала в виде списка [долгота, широта].
         """
         if self.longitude is not None and self.latitude is not None:
-            return f"[{self.latitude},{self.longitude}]"
+            return f"[{self.longitude},{self.latitude}]"
         else:
             return f"[]"

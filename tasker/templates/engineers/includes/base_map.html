@@ -1,19 +1,32 @@
 {% load user_filters %}
 <div id="map"></div>
-
-<script>
+<script type="text/javascript">
     ymaps.ready(init);
 
     function init() {
         var myMap = new ymaps.Map("map", {
             center: {{branch_location}},
             zoom: 10
-        }, {
-            searchControlProvider: 'yandex#search'
         });
 
-        {% for object in objects %}
+        {% for zone in service_zones %}
+            // Получаем координаты зоны из поля geopoints модели ServiceZone
+            var coordinates = {{ zone.geopoints }};
 
+            // Создаем многоугольник на карте
+            var myPolygon = new ymaps.Polygon([coordinates], {
+                hintContent: "{{ zone.name }}"
+            }, {
+                fillColor: '{{ zone.color}}',
+                strokeColor: '#0000FF',
+                strokeOpacity: 0.5,
+                strokeWidth: 2
+            });
+
+            // Добавляем многоугольник на карту
+            myMap.geoObjects.add(myPolygon);
+        {% endfor %}
+        {% for object in fire_alarm_objects %}
         var placemark{{object.id}} = new ymaps.Placemark(
             {{ object.address.get_geopoint }}, {
                 balloonContentHeader: '<h5>{{object.name}}</h5><br>',
@@ -39,8 +52,9 @@
         {% endfor %}
 
         myMap.geoObjects
-            {% for object in objects %}
+            {% for object in fire_alarm_objects %}
             .add(placemark{{object.id}})
             {% endfor %};
+    
     }
 </script>

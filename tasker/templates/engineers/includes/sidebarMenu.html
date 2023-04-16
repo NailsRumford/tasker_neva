@@ -1,39 +1,16 @@
-        <div class="position-sticky pt-3 sidebar-sticky">
-          <ul class="nav flex-column">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{% url 'engineers:service_zones' %}">
-                <span data-feather="home" class="align-text-bottom"></span>
-                Зоны
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'engineers:technicians' %}">
-                <span data-feather="file" class="align-text-bottom"></span>
-                Техники
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'engineers:fire_alarm_objects' %}">
-                <span data-feather="shopping-cart" class="align-text-bottom"></span>
-                Объекты обслуживания ПС
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <span data-feather="users" class="align-text-bottom"></span>
-                Обслуживания
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <span data-feather="bar-chart-2" class="align-text-bottom"></span>
-                Отчеты
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                <span data-feather="layers" class="align-text-bottom"></span>
-                Учетная запись
-              </a>
-            </li>
-          </ul>
+<div class="accordion" id="accordion-sidebarMenu">
+  <div class="card">
+    <div class="card-body"  data-bs-toggle="collapse" data-bs-target="#collapse-sidebarMenu" aria-expanded="true" aria-controls="collapse-sidebarMenu">
+  
+      <li class="list-group-item">Главная</li>
+
+    </div>
+    <div id="collapse-sidebarMenu" class="accordion-collapse collapse show" aria-labelledby="heading-sidebarMenu" data-bs-parent="#accordion-sidebarMenu">
+      <ul class="list-group list-group-flush">
+        <a class="list-group-item" type='button' href="{% url 'engineers:service_zones' %}">Зоны обслуживания ПС</a>
+        <a class="list-group-item" type='button' href="{% url 'engineers:technicians' %}">Техники</a>
+        <a class="list-group-item" type='button' href="{% url 'engineers:fire_alarm_objects' %}">Объекты</a>
+      </ul>
+    </div>
+  </div>
+</div>

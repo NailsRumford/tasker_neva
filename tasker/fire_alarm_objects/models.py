@@ -10,6 +10,7 @@ from shapely.geometry import Polygon, Point
 from technicians.models import Technician
 from tasker.settings import MEDIA_ROOT
 
+
 class Address(models.Model):
     """
     Модель адреса объекта
@@ -32,8 +33,8 @@ class Address(models.Model):
 
 class FireAlarmObject(models.Model):
     FREQUENCY_CHOICES = (
-        ('monthly', 'Ежемесячно'),
-        ('quarterly', 'Ежеквартально'),
+        ('Ежемесячно', 'Ежемесячно'),
+        ('Ежеквартально', 'Ежеквартально'),
     )
 
     name = models.CharField(
@@ -43,7 +44,7 @@ class FireAlarmObject(models.Model):
     )
 
     frequency = models.CharField(
-        max_length=10,
+        max_length=15,
         choices=FREQUENCY_CHOICES,
         verbose_name='периодичность обслуживания',
         help_text='Периодичность обслуживания пожарной сигнализации на объекте.'
@@ -68,7 +69,6 @@ class FireAlarmObject(models.Model):
         null=True,
         upload_to='service_photos/'
     )
-
 
     address = models.ForeignKey(
         Address,
@@ -114,19 +114,19 @@ class FireAlarmObject(models.Model):
         if not self.last_service_date:
             self.last_service_date = timezone.now().date()
         if not self.next_service_date:
-            if self.frequency == 'monthly':
+            if self.frequency == 'Ежемесячно':
                 self.next_service_date = self.last_service_date + \
                     relativedelta(months=1)
-            elif self.frequency == 'quarterly':
+            elif self.frequency == 'Ежеквартально':
                 self.next_service_date = self.last_service_date + \
                     relativedelta(months=3)
         super().save(*args, **kwargs)
 
     def update_next_service_date(self):
-        if self.frequency == 'monthly':
+        if self.frequency == 'Ежемесячно':
             self.next_service_date = self.last_service_date + \
                 relativedelta(months=1)
-        elif self.frequency == 'quarterly':
+        elif self.frequency == 'Ежеквартально':
             self.next_service_date = self.last_service_date + \
                 relativedelta(months=3)
         self.save()
@@ -141,6 +141,8 @@ class FireAlarmObject(models.Model):
             if Polygon(eval(zone.geopoints)).contains(geopoint):
                 self.service_zone = zone
                 self.save()
+                return True
+        return False
 
 
 class FireAlarmObjectService(models.Model):
@@ -152,7 +154,8 @@ class FireAlarmObjectService(models.Model):
     service_date = models.DateTimeField(
         auto_now_add=True, verbose_name='Дата создания')
     technician = models.ForeignKey(
-        Technician, on_delete=models.PROTECT, verbose_name='Техник', related_name='service_done')
+        Technician, blank=True,
+        null=True, on_delete=models.PROTECT, verbose_name='Техник', related_name='service_done')
     service_journal_photo = models.ImageField(
         upload_to='service_photos/', verbose_name='Фотография журнала техобслуживания ПС')
     control_panel_photo = models.ImageField(
@@ -168,7 +171,7 @@ class FireAlarmObjectService(models.Model):
         self.fire_alarm_object.last_service_date = timezone.now()
         self.fire_alarm_object.update_next_service_date()
         pending_failed_services = FailedService.objects.filter(
-            fire_alarm=self.fire_alarm_object, status__in=['pending', 'in_progress'])
+            fire_alarm_object=self.fire_alarm_object, status__in=['pending', 'in_progress'])
         for failed_service in pending_failed_services:
             failed_service.status = 'completed'
             failed_service.save()
@@ -176,15 +179,6 @@ class FireAlarmObjectService(models.Model):
 
     def __str__(self):
         return f'Обслуживание {self.fire_alarm_object} от {self.service_date}'
-
-
-class FailedServicePhoto(models.Model):
-    photo = models.ImageField(
-        upload_to='failedservices/', blank=True, null=True)
-    comment = models.TextField(blank=True)
-
-    def __str__(self):
-        return self.photo.name
 
 
 class FailedService(models.Model):
@@ -196,12 +190,19 @@ class FailedService(models.Model):
         ('in_progress', 'Выполняется'),
         ('completed', 'Завершено'),
     ]
+    technician = models.ForeignKey(
+        Technician, on_delete=models.PROTECT, verbose_name='Техник', related_name='failed_services')
     status = models.CharField(choices=status_choices,
                               max_length=255, default='pending')
-    date_created = models.DateField(default=timezone.now)
-    comment = models.TextField(blank=True)
-    failed_service_photos = models.ManyToManyField(FailedServicePhoto)
-    fire_alarm = models.ForeignKey(FireAlarmObject, on_delete=models.CASCADE)
+    service_date = models.DateTimeField(
+        auto_now_add=True, verbose_name='Дата создания')
+    fire_alarm_object = models.ForeignKey(
+        FireAlarmObject, on_delete=models.CASCADE,related_name='failed_services')
+    photo = models.ImageField(
+        upload_to='failed_service_photos/', verbose_name='Фото неисправности', blank=True,
+        null=True,)
+
+    comment = models.TextField(verbose_name='Комментарий')
 
     def __str__(self):
-        return f"{self.fire_alarm} - {self.date_created}"
+        return f"{self.fire_alarm_object} - {self.service_date }"

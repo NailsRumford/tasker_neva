@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import FailedService, FireAlarmObject, FireAlarmObjectService
+
+admin.site.register(FireAlarmObjectService)
+admin.site.register(FailedService)
+admin.site.register(FireAlarmObject)

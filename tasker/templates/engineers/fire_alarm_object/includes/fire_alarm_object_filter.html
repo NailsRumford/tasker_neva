@@ -1,0 +1,9 @@
+<div class ="card mt-1 mb-1">
+  <div class="card-body">
+    <a href="{% url 'engineers:fire_alarm_objects'%}" class="btn btn-secondary btn-sm p-1 m-1">все</a>
+    <a href="{% url 'engineers:fire_alarm_objects_filter' days_left_in_month%}" class="btn btn-secondary btn-sm p-1 m-1">до конца месяца</a>
+    <a href="{% url 'engineers:fire_alarm_objects_filter' 3 %}" class="btn btn-danger btn-sm p-1 m-1">менее 3 дней</a>
+    <a href="{% url 'engineers:fire_alarm_objects_filter' 6 %}" class="btn btn-warning btn-sm p-1 m-1">менее 6 дней</a>
+    <a href="{% url 'engineers:fire_alarm_objects_filter' 9 %}" class="btn btn-primary btn-sm p-1 m-1">менее 9 дней</a>
+  </div>
+</div>

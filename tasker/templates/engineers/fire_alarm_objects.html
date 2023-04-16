@@ -4,69 +4,24 @@
 {% endblock sidebarMenu %}
 {% load thumbnail %}
 {% block content %}
-<p>
-<div class='row'>
-  <div class='container'>
-    <div class="btn-group me-2">
-      <a href="{% url 'engineers:create_fire_alarm_object' %}" type ="bottom" class="btn btn-sm btn-outline-secondary">Создать объект обслуживания</a>
-      <button type="button" class="btn btn-sm btn-outline-secondary">Импортировать список</button>
-  </div>
-</div>
-<p>
-<div class="row">
-  <div class='container'>
-  <ul class="nav nav-tabs">
-    <li class="nav-item">
-      <a class="nav-link active" aria-current="page" href="#">Все объекты</a>
-
-    </li>
-    <li class="nav-item">
-      <a class="nav-link " aria-current="page" href="#">Ежемесячные объекты</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link " aria-current="page" href="#">Ежеквартальные объекты</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link " aria-current="page" href="#">Объекты без зоны</a>
-    </li>
-  </ul>
-  </div>
-</div>
-<p>
-<div class ="row">
-  <div class='container'>
-  <h5>Всего объектов:{{fire_alarm_objects.count}}</h5>
-  </div>
-</div>
-<p>
-<div class="row">
-  {% for object in fire_alarm_objects %}
-  <div class="col-md-4 mb-3">
-    <div class="card h-100">
-      {% if object.photo %}
-      {% thumbnail object.photo "250x250" crop="center" upscale=True as im %}
-        <a href="{{ object.photo.url }}"><img class="card-img my-2" src="{{ im.url }}"></a>
-      {% endthumbnail %}
-      {% endif %}
-      <div class="card-body">
-        <h5 class="card-title">Объект: {{ object.name }}</h5>
-        <p class="card-text"><h6>Адресс объекта:</h6> {{ object.address }}</p>
-        <p class="card-text"><h6>Обслуживающая организация:</h6> {{ object.service_organizations }}</p>
-        <p class="card-text"><h6>Переодичность:</h6> {{ object.frequency }}</p>
-        <p class="card-text"><h6>Зона:</h6> {{ object.service_zone }}</p>
-        <p class="card-text"><h6>Произвести обслуживания до:</h6> {{ object.next_service_date }}</p>
-        <a href="{% url 'engineers:fire_alarm_object_detail' object.id %}" class="btn btn-primary">Подробнее</a>
-        <div class="btn-group me-2">
-          <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-          <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+<div class='container'>
+  <div class="row">
+    <div class="col-md-6">
+        {% include 'engineers/fire_alarm_object/includes/fire_alarm_object_filter.html' %}
+        {% include 'engineers/fire_alarm_object/fire_alarm_objects_list.html' %}
+    </div> 
+    <div class="col-md-6">
+      <div class='card mt-1 mb-1'>
+        <div class = 'card-body'>
+            <a href="{% url 'engineers:create_fire_alarm_object' %}" type ="bottom" class="btn btn-success">Создать объект обслуживания</a>
+            <a href="{% url 'engineers:import_csv' %}" class="btn btn-secondary">Импортировать список</a>
         </div>
+      </div>
+      <div class='card mt-1 mb-1 'style=' max-height: 490px;'>
+        {% include 'engineers/includes/base_map.html' %}
       </div>
     </div>
   </div>
-  {% empty %}
-  <p>Нет объектов для отображения.</p>
-  {% endfor %}
-
 </div>
 
 {% endblock %}

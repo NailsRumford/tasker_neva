@@ -48,6 +48,12 @@ class ServiceZone(models.Model):
     def __str__(self):
         return self.name
     
+    def get_monthly_service_count(self):
+        return self.fire_alarm_objects.filter(frequency='Ежемесячно').count()
+
+    def get_quarterly_service_count(self):
+        return self.fire_alarm_objects.filter(frequency='Ежеквартально').count()
+    
     def save(self, *args, **kwargs):
         polygon = Polygon(eval(self.geopoints))
 
