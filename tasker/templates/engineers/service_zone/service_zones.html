@@ -1,0 +1,13 @@
+{% load thumbnail %}
+{% load user_filters %}
+<div class="accordion" id="accordion-service_zones">
+  <div class="card mb-1 mt-1" >
+    <div class='card-body'style='overflow:auto; max-height: 500px;'>
+      {% for service_zone in service_zones %}
+        {% include 'engineers/service_zone/includes/service_zone_info.html' %}
+        {% empty %}
+        <p>Нет объектов для отображения.</p>
+      {% endfor %}
+    </div>
+  </div>  
+</div>

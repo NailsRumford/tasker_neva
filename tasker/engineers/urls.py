@@ -16,6 +16,8 @@ urlpatterns = [
          views.service_zone_delete, name='service_zone_delete'),
     path('service_zone/<int:service_zone_id>/edit/',
          views.service_zone_edit, name='service_zone_edit'),
+     path('service_zone/<int:service_zone_id>/deteil/',
+         views.service_zone_deteil, name='service_zone_deteil'),
     path('technicians/', views.technicians, name='technicians'),
     path('technician/<int:technician_id>/detail/',
          views.technician_detail, name='technician_detail'),

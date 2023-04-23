@@ -2,11 +2,12 @@
   <div class="card">
     <div class="card-body"  data-bs-toggle="collapse" data-bs-target="#collapse-sidebarMenu" aria-expanded="true" aria-controls="collapse-sidebarMenu">
   
-      <li class="list-group-item">Главная</li>
+      <li class="list-group-item">Меню</li>
 
     </div>
     <div id="collapse-sidebarMenu" class="accordion-collapse collapse show" aria-labelledby="heading-sidebarMenu" data-bs-parent="#accordion-sidebarMenu">
       <ul class="list-group list-group-flush">
+        <a class="list-group-item" type='button' href="{% url 'engineers:index' %}">Главная</a>
         <a class="list-group-item" type='button' href="{% url 'engineers:service_zones' %}">Зоны обслуживания ПС</a>
         <a class="list-group-item" type='button' href="{% url 'engineers:technicians' %}">Техники</a>
         <a class="list-group-item" type='button' href="{% url 'engineers:fire_alarm_objects' %}">Объекты</a>

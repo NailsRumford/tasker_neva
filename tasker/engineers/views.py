@@ -7,7 +7,7 @@ from core.decorators.user_decorators import engineer_required
 from django.db.models import Q
 from technicians.models import Technician
 from fire_alarm_objects.models import FireAlarmObject
-from fire_alarm_objects.forms import FireAlarmObjectForm, AddZone2FireAlarmObjectForm
+from fire_alarm_objects.forms import FireAlarmObjectForm
 from shapely.geometry import Polygon
 import csv
 from django.shortcuts import render
@@ -17,34 +17,66 @@ from django.db.models import Prefetch
 from .tools.objects import get_fire_alarm_objects
 from core.tools.tools import days_left_in_month
 from fire_alarm_objects.models import FailedService, FireAlarmObject, FireAlarmObjectService
+from service_zones.utils import add_fire_alarm_zone
 
 
 @engineer_required
 def index(request):
     engineer = get_object_or_404(Engineer, user=request.user)
-    zones = ServiceZone.objects.filter(branch=engineer.branch)
+    fire_alarm_services = FireAlarmObjectService.objects.filter(
+        technician__branch=engineer.branch)
+    fire_alarm_failed_services = FailedService.objects.filter(
+        technician__branch=engineer.branch)
+    fire_alarm_objects_without_zone = FireAlarmObject.objects.filter(
+        branch=engineer.branch, service_zone=None)
+    technician_without_zone = Technician.objects.filter(
+        branch=engineer.branch, service_zones=None)
+    service_zone = ServiceZone.objects.filter(branch=engineer.branch)
+    service_zone_without_technician = ServiceZone.objects.filter(
+        branch=engineer.branch, technicians = None)
     fire_alarm_objects = FireAlarmObject.objects.select_related(
         'address').filter(branch=engineer.branch)
     branch_location = engineer.branch.get_location()
     template = 'engineers/index.html'
-    context = {'zones': zones,
+    context = {'service_zone': service_zone,
                'branch_location': branch_location,
-               'objects': fire_alarm_objects}
+               'objects': fire_alarm_objects,
+               'fire_alarm_services': fire_alarm_services,
+               'fire_alarm_failed_services': fire_alarm_failed_services,
+               'fire_alarm_objects_without_zone': fire_alarm_objects_without_zone,
+               'technician_without_zone': technician_without_zone,
+               'service_zone_without_technician': service_zone_without_technician,
+               'index': True}
     return render(request, template_name=template, context=context)
 
 
 @engineer_required
 def service_zones(request):
     engineer = get_object_or_404(Engineer, user=request.user)
-    zones = ServiceZone.objects.filter(branch=engineer.branch)
+    service_zones = ServiceZone.objects.filter(branch=engineer.branch)
     fire_alarm_objects = FireAlarmObject.objects.select_related(
         'address').filter(branch=engineer.branch)
     branch_location = engineer.branch.get_location()
     template = 'engineers/service_zones.html'
-    context = {'zones': zones,
+
+    context = {'service_zones': service_zones,
                'branch_location': branch_location,
-               'objects': fire_alarm_objects}
+               'fire_alarm_objects': fire_alarm_objects}
     return render(request, template_name=template, context=context)
+
+
+@engineer_required
+def service_zone_deteil(request, service_zone_id):
+    service_zone = get_object_or_404(ServiceZone, id=service_zone_id)
+    fire_alarm_objects = FireAlarmObject.objects.filter(
+        service_zone=service_zone)
+    technicians = Technician.objects.filter(
+        service_zones__service_zone_id=service_zone_id)
+    template = "engineers/service_zone_detail.html"
+    context = {'service_zone': service_zone,
+               'fire_alarm_objects': fire_alarm_objects,
+               'technicians': technicians}
+    return render(request, template, context)
 
 
 @engineer_required
@@ -58,6 +90,8 @@ def create_service_zone(request):
         service_zone.geopoints = form.cleaned_data['geopoints']
         service_zone.branch = engineer.branch
         service_zone.save()
+        add_fire_alarm_zone(service_zone)
+
         return redirect('engineers:service_zones')
 
     return render(request,
@@ -76,7 +110,8 @@ def service_zone_edit(request, service_zone_id):
     template_create = 'engineers/create_service_zone.html'
     form = ServiceZoneForm(request.POST or None, instance=zone)
     if form.is_valid():
-        form.save()
+        service_zone = form.save()
+        add_fire_alarm_zone(service_zone)
         return redirect('engineers:service_zones')
     context = {
         'form': form,
@@ -159,8 +194,8 @@ def technician_detail(request, technician_id):
     fire_alarm_objects = FireAlarmObject.objects.select_related(
         'address').filter(
         service_zone__technicians__technician_id=technician.id)
-    service_zones = ServiceZone.objects.select_related('fire_alarm_objects').filter(
-        technicians__technician_id=technician.id).select_related
+    service_zones = ServiceZone.objects.filter(
+        technicians__technician_id=technician.id)
     if request.method == 'POST':
         form = AssignZonesForm(technician, request.POST)
         if form.is_valid():

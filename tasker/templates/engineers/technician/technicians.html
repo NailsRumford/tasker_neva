@@ -1,0 +1,6 @@
+
+      {% for technician in technicians %}
+        {% with technician=technician.technician service_zones=technician.service_zones fire_alarm_objects=technician.fire_alarm_objects branch_location=technician.branch_location%}
+          {% include 'engineers/technician/technician_info.html' %}
+        {% endwith %}
+      {% endfor %}

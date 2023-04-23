@@ -1,0 +1,41 @@
+{% load thumbnail %}
+<div class="accordion" id="accordion-fire_alarm_service{{fire_alarm_service.id}}">
+    <div class="card mb-1 mt-1" >
+      <div class="card-body"  data-bs-toggle="collapse" data-bs-target="#collapse-fire_alarm_service{{fire_alarm_service.id}}"  aria-controls="collapse-fire_alarm_service{{fire_alarm_service.id}}">
+        <div class ='row'>  
+          <div class="col-md-6">
+            <h5>Обслуживание {{fire_alarm_sevice.fire_alarm_object}} от {{fire_alarm_service.service_date}}</h5>
+          </div>
+        </div>
+      </div>
+      <div id="collapse-fire_alarm_service{{fire_alarm_service.id}}" class="accordion-collapse collapse" aria-labelledby="heading-fire_alarm_service{{fire_alarm_service.id}}" data-bs-parent="#accordion-fire_alarm_service{{fire_alarm_service.id}}">
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <div class="card-body">
+              <p class="card-text">Произвел обслуживание: {{ fire_alarm_service.technician }}</p>
+              <p class="card-text">Коментарий: {{ fire_alarm_service.coment }}</p>
+              <div class='row'>
+                <div class='col-6'>
+                  <p class="card-text">Фото журнала<p>
+                  {% if  fire_alarm_service.service_journal_photo %}
+                    {% thumbnail fire_alarm_service.service_journal_photo "90x90" crop="center" as service_journal_photo %}
+                      <a href="{{ fire_alarm_service.service_journal_photo.url }}"><img class="img-thumbnail float-end" src="{{ service_journal_photo.url }}"></a>
+                    {% endthumbnail %}
+                  {% endif %}
+                </div>
+                <div class='col-6'>
+                  <p class="card-text">Фото панели<p>
+                  {% if fire_alarm_service.control_panel_photo %}
+                    {% thumbnail fire_alarm_service.control_panel_photo  "90x90" crop="center" as control_panel_photo %}
+                      <a href="{{ fire_alarm_service.control_panel_photo.url }}"><img class="img-thumbnail float-end" src="{{ control_panel_photo.url }}"></a>
+                    {% endthumbnail %}
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+

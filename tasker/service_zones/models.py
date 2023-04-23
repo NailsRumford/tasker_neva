@@ -4,6 +4,7 @@ from technicians.models import Technician
 import random
 from shapely.geometry import Polygon
 from django.core.exceptions import ValidationError
+from shapely.geometry import Polygon, Point
 
 
 class ServiceZone(models.Model):
@@ -53,7 +54,7 @@ class ServiceZone(models.Model):
 
     def get_quarterly_service_count(self):
         return self.fire_alarm_objects.filter(frequency='Ежеквартально').count()
-    
+            
     def save(self, *args, **kwargs):
         polygon = Polygon(eval(self.geopoints))
 

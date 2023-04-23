@@ -1,0 +1,12 @@
+<div class="accordion" id="accordion-service_zone_without_technician">
+    <div class="card mb-1 mt-1" >
+      <div class='card-body'style='overflow:auto; max-height: 500px;'>
+        <p class='card-text'><h5>Объекты без зон</h5></p>
+        {% for technician in technician_without_zone %}
+          {% include 'engineers/technician/technician_info.html' %}
+          {% empty %}
+          <p>Нет объектов для отображения.</p>
+        {% endfor %}
+      </div>
+    </div>  
+  </div>

@@ -58,21 +58,18 @@ class FireAlarmObjectForm(forms.ModelForm):
             longitude=longitude)
         return address_object
 
-class AddZone2FireAlarmObjectForm(forms.ModelForm):
-    service_zone = forms.ChoiceField(
-        choices=[],
-        label='Филиал')
-    class Meta:
-        model = FireAlarmObject
-        fields = ('service_zone',)
-
-    def __init__(self, engineer=None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['service_zone'].choices = [(service_zone.pk, service_zone.name) for service_zone in self.service_zones]
-
-        self.service_zones = ServiceZone.objects.filter(branch=engineer.branch)
-
-
+#class AddZone2FireAlarmObjectForm(forms.ModelForm):
+#   service_zone = forms.ChoiceField(
+#       choices=[],
+#       label='Филиал')
+#   class Meta:
+#       model = FireAlarmObject
+#       fields = ('service_zone',)
+#   def __init__(self, engineer=None, *args, **kwargs):
+#       super().__init__(*args, **kwargs)
+#       self.fields['service_zone'].choices = [(service_zone.pk, service_zone.name) for service_zone in self.service_zones]
+#       self.service_zones = ServiceZone.objects.filter(branch=engineer.branch)
+#
 
 class FireAlarmObjectServiceForm(forms.ModelForm):
     class Meta:

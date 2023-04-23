@@ -40,3 +40,8 @@ def get_monthly_service_count(objects):
 @register.filter
 def get_quarterly_service_count(objects):
     return objects.filter(frequency='Ежеквартально').count()
+
+
+@register.filter
+def get_zone_quarterly_service_count(objects, zone):
+    return objects.filter(frequency='Ежеквартально', zone = zone).count()

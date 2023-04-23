@@ -4,5 +4,78 @@
 {% endblock sidebarMenu %}
 
 {% block content %}
-  {% include 'engineers/includes/base_map.html' %}
+<div class ='conteiner'>
+  <div class='conteiner mt-1 mb-1'>
+    {% if fire_alarm_objects_without_zone %}
+      <button class="btn btn-danger btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#fire_alarm_objects_without_zone" aria-expanded="false" aria-controls="fire_alarm_objects_without_zone">
+        Объекты без назначеных зон
+      </button>
+    {% endif %}
+    {% if service_zone_without_technician %}
+      <button class="btn btn-danger btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#service_zone_without_technician" aria-expanded="false" aria-controls="service_zone_without_technician">
+        Зоны без назначеных техников
+      </button>
+    {% endif %}
+    {% if technician_without_zone %}
+      <button class="btn btn-danger btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#technician_without_zone" aria-expanded="false" aria-controls="technician_without_zone">
+        Техники без назначеных зон
+      </button>
+    {% endif %}
+      <div class="collapse" id="fire_alarm_objects_without_zone">
+        <div class='card-body'style='overflow:auto; max-height: 500px;'>
+          {% for fire_alarm_object in fire_alarm_objects_without_zone %}
+            {% include 'engineers/fire_alarm_object/includes/fire_alarm_object_info.html' %}
+            {% empty %}
+            <p>Нет объектов для отображения.</p>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="collapse" id="service_zone_without_technician">
+        <div class='card-body'style='overflow:auto; max-height: 500px;'>
+          {% for service_zone in service_zone_without_technician %}
+            {% include 'engineers/service_zone/includes/service_zone_info.html' %}
+            {% empty %}
+            <p>Нет объектов для отображения.</p>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="collapse" id="technician_without_zone">
+        <div class='card-body'style='overflow:auto; max-height: 500px;'>
+          {% for technician in technician_without_zone %}
+            {% include 'engineers/technician/technician_info.html' %}
+            {% empty %}
+            <p>Нет объектов для отображения.</p>
+          {% endfor %}
+        </div>
+      </div>
+  </div>
+  <div class='conteiner'>
+    {% if fire_alarm_failed_services %}
+      <div class="accordion" id="accordion-service_zones">
+        <div class="card mb-1 mt-1" >
+          <div class= 'card-header'>
+            <h5>Проблемные обслуживания</h5>
+          </div>
+          <div class='card-body'style='overflow:auto; max-height: 500px;'>
+            {% for fire_alarm_failed_service in fire_alarm_failed_services %}
+              {% include 'engineers/includes/fire_alarm_failed_service.html' %}
+            {% endfor %}
+          </div>
+        </div>  
+      </div>
+    {% endif %}
+    {% if fire_alarm_services %}
+      <div class="card mb-1 mt-1" >
+        <div class='card-header'>
+          <h5>События</h5>
+        </div>
+        <div class='card-body'style='overflow:auto; max-height: 500px;'>
+          {% for fire_alarm_service in fire_alarm_services %}
+            {% include 'engineers/includes/fire_alarm_service.html' %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>  
 {% endblock content %}

@@ -1,0 +1,45 @@
+{% load user_filters %}
+<div class="accordion" id="accordion-service_zone{{service_zone.id}}">
+    <div class="card mb-1 mt-1" >
+      <div class="card-body"  data-bs-toggle="collapse" data-bs-target="#collapse-service_zone{{service_zone.id}}"  aria-controls="collapse-service_zone{{service_zone.id}}">
+        <div class="row">
+          <div class="col-6">
+            <h5>Зона: {{ service_zone }}</h5> 
+            <p>Количество объектов: {{ service_zone.fire_alarm_objects.count }}</p>
+          </div>
+          <div class="col-6">
+            <p>Ежемесячно: {{ service_zone.get_monthly_service_count }}</p>
+            <p>Ежеквартально: {{ service_zone.get_quarterly_service_count }}</p>
+          </div>
+        </div>
+      </div>
+      <div id="collapse-service_zone{{service_zone.id}}" class="accordion-service_zone{{service_zone.id}}" aria-labelledby="heading-service_zone{{service_zone.id}}">
+        <div class="card-body">
+          <div class="container">
+            <a href="{% url 'engineers:service_zone_deteil' service_zone.id %}" type ="bottom" class="btn btn-success">Подробнее</a>
+            <a href="{% url 'engineers:service_zone_edit' service_zone.id %}" type ="bottom" class="btn btn-success">Редактировать</a>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteZone">
+              Удалить зону
+            </button>
+          </div>  
+        </div>  
+      </div>  
+    </div>  
+  </div>
+  <div class="modal fade" id="deleteZone" tabindex="-1" aria-labelledby="deleteZonelLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="deleteZoneLabel">Заголовок модального окна</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+          <a href="{% url 'engineers:service_zone_delete' service_zone.id %}" type ="bottom" class="btn btn-primary">Удалить</a>
+        </div>
+      </div>
+    </div>
+  </div>

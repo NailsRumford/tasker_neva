@@ -2,6 +2,8 @@ from django import forms
 from .models import ServiceZone, TechnicianZone
 from shapely.geometry import Polygon
 from django.core.exceptions import ValidationError
+from shapely.geometry import Polygon, Point
+from fire_alarm_objects.models import FireAlarmObject
 
 
 def validate_geopoints(value, current_zone_id=None):
@@ -15,6 +17,10 @@ def validate_geopoints(value, current_zone_id=None):
 class ServiceZoneForm(forms.ModelForm):
     geopoints = forms.CharField(widget=forms.HiddenInput())
 
+    class Meta:
+        model = ServiceZone
+        fields = ('name', 'description', 'geopoints')
+
     def clean_geopoints(self):
         geopoints = self.cleaned_data['geopoints']
         current_zone_id = None
@@ -25,12 +31,11 @@ class ServiceZoneForm(forms.ModelForm):
         except ValidationError as error:
             self.add_error('geopoints', error)
         return geopoints
+    
 
-    class Meta:
-        model = ServiceZone
-        fields = ('name', 'description', 'geopoints')
-        
-        
+
+
+
 class AssignZonesForm(forms.Form):
     zones = forms.ModelMultipleChoiceField(
         queryset=None,
@@ -38,10 +43,11 @@ class AssignZonesForm(forms.Form):
         label='Выберите зоны для назначения',
     )
 
-    def __init__(self, technician = None, *args, **kwargs):
+    def __init__(self, technician=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Получаем зоны, которые не связаны с выбранным техником
-        available_zones = ServiceZone.objects.exclude(technicians__technician=technician).all()                    
+        available_zones = ServiceZone.objects.exclude(
+            technicians__technician=technician).all()
         self.fields['zones'].queryset = available_zones
         self.technician = technician
 

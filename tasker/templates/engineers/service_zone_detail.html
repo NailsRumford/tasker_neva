@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block sidebarMenu %}
+  {% include 'engineers/includes/sidebarMenu.html' %}
+{% endblock sidebarMenu %}
+{% load user_filters %}
+{% block content %}
+<div class="row">
+    <div class="col-md-6 ">
+      {% include 'engineers/service_zone/includes/service_zone_info.html' %}
+      {% include 'engineers/fire_alarm_object/fire_alarm_objects_list.html' %}
+
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          {% include 'engineers/includes/base_map.html'%}
+        </div>
+      </div>
+    </div>
+</div>
+
+
+{% endblock content %}

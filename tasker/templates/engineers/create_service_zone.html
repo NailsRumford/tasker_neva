@@ -125,23 +125,27 @@
               {% else %}
                 <form id="polygon-form" method="POST" action="{% url 'engineers:create_service_zone' %}">
               {% endif %}
-                    {% csrf_token %}
-                    {% for field in form %}    
-                        <div class="form-group row my-3 p-3">
-                          <label for="{{field.id_for_label}}">
-                            {{ field.label }}
-                            {% if field.field.required %}                  
-                               <span class="required text-danger" >*</span>
-                            {% endif %}                
-                          </label>
-                          {{ field }}
-                          {% if field.help_text %}             
-                            <small id="{{ field.id_for_label }}-help" class="form-text text-muted">
-                              {{ field.help_text }}
-                            </small>
-                          {% endif %}                  
-                        </div> 
-                  {% endfor %}
+                {% csrf_token %}                     
+                <input type="hidden" name="geopoints" value="{% if is_edit %}{{form.initial.geopoints}}{% endif %}" id="id_geopoints">                          
+                <div class="form-group row my-3 p-3">
+                  <label for="id_name">
+                    Название                                           
+                       <span class="required text-danger">*</span>                                         
+                  </label>
+                  <input type="text" name="name" value="{% if is_edit %}{{form.initial.name}}{% endif %}" maxlength="100" required="" id="id_name">                                     
+                    <small id="id_name-help" class="form-text text-muted">
+                      Название зоны обслуживания.
+                    </small>                    
+                </div>    
+                <div class="form-group row my-3 p-3">
+                  <label for="id_description">
+                    Описание  
+                  </label>
+                  <textarea name="description" value="{% if is_edit %}{{form.initial.description}}{% endif %}" cols="40" rows="10" id="id_description"></textarea>    
+                    <small id="id_description-help" class="form-text text-muted">
+                      Подробное описание зоны обслуживания.
+                    </small>                 
+                </div>       
                 <button id="add_zone">Сохранить зону</button>
               </form>
             </div>
