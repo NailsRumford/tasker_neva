@@ -31,10 +31,21 @@ class ServiceZoneForm(forms.ModelForm):
         except ValidationError as error:
             self.add_error('geopoints', error)
         return geopoints
+
+
+class AssignZoneToObjectForm (forms.Form):
+    service_zone = forms.ModelChoiceField(queryset=None)
+
+    def __init__(self, fire_alarm_object=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if fire_alarm_object is not None:
+            zones = ServiceZone.objects.filter(branch=fire_alarm_object.branch)
+            self.fields['service_zone'].queryset = zones
     
-
-
-
+    def save(self, commit=True):
+        zone = self.cleaned_data['service_zone']
+        
+    
 
 class AssignZonesForm(forms.Form):
     zones = forms.ModelMultipleChoiceField(

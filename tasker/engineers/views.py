@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from service_zones.forms import ServiceZoneForm, AssignZonesForm
+from service_zones.forms import ServiceZoneForm, AssignZonesForm, AssignZoneToObjectForm
 from .models import Engineer
 from django.shortcuts import get_object_or_404, redirect
 from service_zones.models import ServiceZone, TechnicianZone
@@ -292,8 +292,14 @@ def add_zone2fire_alarm_object_form(request, fire_alarm_object):
 @engineer_required
 def fire_alarm_object_detail(request, object_id):
     fire_alarm_object = get_object_or_404(FireAlarmObject, id=object_id)
-    zone2fire_alarm_object_form = add_zone2fire_alarm_object_form(
-        request, fire_alarm_object)
+    if request.POST:
+        assign_zone_to_object_form = AssignZoneToObjectForm(fire_alarm_object, request.POST)
+        if assign_zone_to_object_form.is_valid():
+            zone = assign_zone_to_object_form.cleaned_data['service_zone']
+            fire_alarm_object.service_zone =zone
+            fire_alarm_object.save()
+            return redirect('engineers:fire_alarm_object_detail', fire_alarm_object.id)
+    assign_zone_to_object_form = AssignZoneToObjectForm(fire_alarm_object)
     fire_alarm_object_services = FireAlarmObjectService.objects.filter(
         fire_alarm_object_id=object_id).order_by('-service_date')
     fire_alarm_object_failed_services = FailedService.objects.filter(fire_alarm_object_id=object_id).exclude(
@@ -304,7 +310,7 @@ def fire_alarm_object_detail(request, object_id):
         'fire_alarm_object_failed_services': fire_alarm_object_failed_services,
         'show_delete': True,
         'days_left_in_month': days_left_in_month(),
-        'add_zone2fire_alarm_object_form': zone2fire_alarm_object_form}
+        'assign_zone_to_object_form': assign_zone_to_object_form}
     template = 'engineers/fire_alarm_object_detail.html'
     return render(request, template, context)
 

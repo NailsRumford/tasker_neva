@@ -24,7 +24,7 @@
           <p class="card-text">Последняя дата обслуживания: {{ fire_alarm_object.last_service_date }}</p>
           <p class="card-text">Следующая дата обслуживания: {{ fire_alarm_object.next_service_date }}</p>
           <div class="d-grid gap-2 gap-2 d-md-block">   
-            {% if show_delete1 %}
+            {% if show_delete %}
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                 Удалить объект
               </button>
@@ -37,7 +37,7 @@
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                      <a href="{% url 'engineers:create_fire_alarm_object' %}" type ="bottom" class="btn btn-primary">Удалить</a>
+                      <a href="{% url 'engineers:fire_alarm_object_delete' fire_alarm_object.id%}" type ="bottom" class="btn btn-primary">Удалить</a>
                     </div>
                   </div>
                 </div>
@@ -49,7 +49,7 @@
                 </button>
               </a>
             {% endif %}
-            {% if add_zone2fire_alarm_object_form %}
+            {% if assign_zone_to_object_form%}
                 <a class="btn btn-primary " data-bs-toggle="collapse" href="#collapse-add_zone2fire_alarm_object_form" role="button" aria-expanded="false" aria-controls="collapse-add_zone2fire_alarm_object_form">
                     Изменить зону
                 </a>
@@ -63,7 +63,7 @@
   <div class="card card-body">
     <form id="add_zone2fire_alarm_object_form" method="POST" enctype="multipart/form-data" action="{% url 'engineers:fire_alarm_object_detail' fire_alarm_object.id %}">
       {% csrf_token %}
-      {{ add_zone2fire_alarm_object_form.as_p }}
+      {{ assign_zone_to_object_form.as_p }}
       <button id="add_zone2fire_alarm_object_form" class="btn btn-success btn-sm">Сохранить зону</button>
     </form>
   </div>
