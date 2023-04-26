@@ -38,7 +38,7 @@ class FireAlarmObject(models.Model):
     )
 
     name = models.CharField(
-        max_length=255,
+        max_length=500,
         verbose_name='название объекта',
         help_text='Название объекта, на котором установлена пожарная сигнализация.'
     )
@@ -99,6 +99,24 @@ class FireAlarmObject(models.Model):
         on_delete=models.DO_NOTHING,
         verbose_name="Обслуживающия организация",
         related_name="fire_alarm_objects"
+    )
+
+    remote_number = models.FloatField(verbose_name='Пультовый номер',
+                                      blank=True,
+                                      null=True)
+
+    room_number = models.CharField(verbose_name='Помещение',
+                                   max_length=50,
+                                   blank=True,
+                                   null=True)
+    contract_number = models.CharField(verbose_name='Номер договора',
+                                       max_length=50,
+                                       blank=True,
+                                       null=True)
+    contract_date = models.DateField(
+        verbose_name='Дата заключения договора',
+        blank=True,
+        null=True
     )
 
     class Meta:
@@ -197,12 +215,16 @@ class FailedService(models.Model):
     service_date = models.DateTimeField(
         auto_now_add=True, verbose_name='Дата создания')
     fire_alarm_object = models.ForeignKey(
-        FireAlarmObject, on_delete=models.CASCADE,related_name='failed_services')
+        FireAlarmObject, on_delete=models.CASCADE, related_name='failed_services')
     photo = models.ImageField(
         upload_to='failed_service_photos/', verbose_name='Фото неисправности', blank=True,
         null=True,)
 
     comment = models.TextField(verbose_name='Комментарий')
-
+    
+    class Meta:
+        verbose_name = 'Проблема с обслуживания'
+        verbose_name_plural = 'Проблемы с обслуживаниями'
+        
     def __str__(self):
         return f"{self.fire_alarm_object} - {self.service_date }"

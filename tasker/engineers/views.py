@@ -33,7 +33,7 @@ def index(request):
         branch=engineer.branch, service_zones=None)
     service_zone = ServiceZone.objects.filter(branch=engineer.branch)
     service_zone_without_technician = ServiceZone.objects.filter(
-        branch=engineer.branch, technicians = None)
+        branch=engineer.branch, technicians=None)
     fire_alarm_objects = FireAlarmObject.objects.select_related(
         'address').filter(branch=engineer.branch)
     branch_location = engineer.branch.get_location()
@@ -293,10 +293,11 @@ def add_zone2fire_alarm_object_form(request, fire_alarm_object):
 def fire_alarm_object_detail(request, object_id):
     fire_alarm_object = get_object_or_404(FireAlarmObject, id=object_id)
     if request.POST:
-        assign_zone_to_object_form = AssignZoneToObjectForm(fire_alarm_object, request.POST)
+        assign_zone_to_object_form = AssignZoneToObjectForm(
+            fire_alarm_object, request.POST)
         if assign_zone_to_object_form.is_valid():
             zone = assign_zone_to_object_form.cleaned_data['service_zone']
-            fire_alarm_object.service_zone =zone
+            fire_alarm_object.service_zone = zone
             fire_alarm_object.save()
             return redirect('engineers:fire_alarm_object_detail', fire_alarm_object.id)
     assign_zone_to_object_form = AssignZoneToObjectForm(fire_alarm_object)
@@ -329,6 +330,12 @@ def import_csv(request):
         for row in reader:
             try:
                 address = clean_address(row['address'])
+                contract_number = row['contract_number'] if row['contract_number'] != '' else None
+                contract_date = clean_date(row['contract_date'])
+                room_number = row['room_number'] if row['room_number'] != '' else None
+                remote_number = row['remote_number']
+                if isinstance(remote_number, str):
+                    remote_number = None
                 name = row['name']
                 frequency = row['frequency']
                 if frequency != 'Ежемесячно' and frequency != 'Ежеквартально':
@@ -343,11 +350,15 @@ def import_csv(request):
                 service_organizations = ServiceOrganizations.objects.get(
                     name=service_organizations)
                 model, status = FireAlarmObject.objects.get_or_create(name=name,
+                                                                      remote_number=remote_number,
                                                                       address=address,
+                                                                      room_number=room_number,
                                                                       frequency=frequency,
                                                                       last_service_date=last_service_date,
                                                                       branch=engineer.branch,
-                                                                      service_organizations=service_organizations)
+                                                                      service_organizations=service_organizations,
+                                                                      contract_number=contract_number,
+                                                                      contract_date=contract_date)
                 if status:
                     success_count += 1
                     status = model.auto_add_service_zone()

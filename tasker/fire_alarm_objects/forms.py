@@ -25,14 +25,19 @@ class FireAlarmObjectForm(forms.ModelForm):
                   'latitude',
                   'longitude',
                   'address',
+                  'room_number',
                   'service_organizations',
                   'frequency',
+                  'contract_number',
+                  'contract_date',
                   'last_service_date',
                   'photo')
 
     def __init__(self, engineer=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['last_service_date'].widget.attrs['placeholder'] = (
+            'дд.мм.гггг')
+        self.fields['contract_date'].widget.attrs['placeholder'] = (
             'дд.мм.гггг')
 
     def clean_address(self):
