@@ -43,6 +43,12 @@ class CreationForm(UserCreationForm):
         fields = ('last_name', 'first_name', 'middle_name', 'phone_number',
                   'username', 'email', 'role', 'branch')
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['branch'].choices = [
+            (branch.pk, branch.city) for branch in Branch.objects.all()]
+        self.fields['username'].label = 'Логин'
+
     def clean_role(self):
         role = self.cleaned_data.get('role')
         if role not in dict(ROLE_CHOICES).keys():

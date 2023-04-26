@@ -331,11 +331,11 @@ def import_csv(request):
             try:
                 address = clean_address(row['address'])
                 contract_number = row['contract_number'] if row['contract_number'] != '' else None
-                contract_date = clean_date(row['contract_date'])
+                contract_date = row['contract_date'] if row['contract_date'] != '' else None
+                if contract_date is not None:
+                    contract_date = clean_date(contract_date)
                 room_number = row['room_number'] if row['room_number'] != '' else None
                 remote_number = row['remote_number']
-                if isinstance(remote_number, str):
-                    remote_number = None
                 name = row['name']
                 frequency = row['frequency']
                 if frequency != 'Ежемесячно' and frequency != 'Ежеквартально':

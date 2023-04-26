@@ -15,6 +15,31 @@
             {% endthumbnail %}
           {% endif %}
         </div>
+        <button onclick="getDirections()">Построить маршрут</button>
+
+<script>
+function getDirections() {
+  // Получить координаты места, для которого нужно построить маршрут
+  let latitude = {{object.address.longitude}};
+  let longitude = {{object.address.latitude}};
+
+  // Проверить, поддерживает ли устройство API навигации
+  if ('geolocation' in navigator && 'openURL' in navigator) {
+    // Получить текущие координаты устройства
+    navigator.geolocation.getCurrentPosition(function(position) {
+      let currentLat = position.coords.latitude;
+      let currentLon = position.coords.longitude;
+
+      // Сформировать ссылку для открытия навигации и передать координаты места назначения
+      let url = `geo:${latitude},${longitude}?q=${latitude},${longitude}(Destination)&saddr=${currentLat},${currentLon}`;
+      navigator.openURL(url);
+    });
+  } else {
+    // Если устройство не поддерживает API навигации, вывести сообщение об ошибке
+    alert('Навигация не поддерживается на этом устройстве');
+  }
+}
+</script>
         <div class='container'>
           <p class="card-text"><h6>Обслуживающая организация:</h6> {{ object.service_organizations }}</p>
           <p class="card-text"><h6>Переодичность:</h6> {{ object.frequency }}</p>

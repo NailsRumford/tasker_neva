@@ -101,7 +101,8 @@ class FireAlarmObject(models.Model):
         related_name="fire_alarm_objects"
     )
 
-    remote_number = models.FloatField(verbose_name='Пультовый номер',
+    remote_number = models.CharField(verbose_name='Пультовый номер',
+                                     max_length=20,
                                       blank=True,
                                       null=True)
 
