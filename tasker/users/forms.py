@@ -7,7 +7,6 @@ from technicians.models import Technician
 
 User = get_user_model()
 
-branches = Branch.objects.all()
 
 ROLE_CHOICES = (
     ('engineer', 'Инженер'),
@@ -34,53 +33,53 @@ class CreationForm(UserCreationForm):
                                    help_text='Введите телефон',)
     role = forms.ChoiceField(choices=ROLE_CHOICES,
                              label='Должность')
-    branch = forms.ChoiceField(
-        choices=[(branch.pk, branch.city) for branch in Branch.objects.all()],
-        label='Филиал')
-
-    class Meta(UserCreationForm.Meta):
-        model = User
-        fields = ('last_name', 'first_name', 'middle_name', 'phone_number',
-                  'username', 'email', 'role', 'branch')
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['branch'].choices = [
-            (branch.pk, branch.city) for branch in Branch.objects.all()]
-        self.fields['username'].label = 'Логин'
-
-    def clean_role(self):
-        role = self.cleaned_data.get('role')
-        if role not in dict(ROLE_CHOICES).keys():
-            raise forms.ValidationError('Недопустимая роль')
-        return role
-
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        branch_id = self.cleaned_data['branch']
-        role = self.cleaned_data['role']
-        last_name = self.cleaned_data['last_name']
-        first_name = self.cleaned_data['first_name']
-        middle_name = self.cleaned_data['middle_name']
-        phone_number = self.cleaned_data['phone_number']
-        if commit:
-            user.save()
-            if role == 'technician':
-                tech = Technician.objects.create(
-                    user=user,
-                    branch_id=branch_id,
-                    last_name=last_name,
-                    first_name=first_name,
-                    middle_name=middle_name,
-                    phone=phone_number,
-                )
-            elif role == 'engineer':
-                eng = Engineer.objects.create(
-                    user=user,
-                    branch_id=branch_id,
-                    last_name=last_name,
-                    first_name=first_name,
-                    middle_name=middle_name,
-                    phone=phone_number,
-                )
-        return user
+#    branch = forms.ChoiceField(
+#        choices=[(branch.pk, branch.city) for branch in Branch.objects.all()],
+#        label='Филиал')
+#
+#    class Meta(UserCreationForm.Meta):
+#        model = User
+#        fields = ('last_name', 'first_name', 'middle_name', 'phone_number',
+#                  'username', 'email', 'role', 'branch')
+#
+#    def __init__(self, *args, **kwargs):
+#        super().__init__(*args, **kwargs)
+#        self.fields['branch'].choices = [
+#            (branch.pk, branch.city) for branch in Branch.objects.all()]
+#        self.fields['username'].label = 'Логин'
+#
+#    def clean_role(self):
+#        role = self.cleaned_data.get('role')
+#        if role not in dict(ROLE_CHOICES).keys():
+#            raise forms.ValidationError('Недопустимая роль')
+#        return role
+#
+#    def save(self, commit=True):
+#        user = super().save(commit=False)
+#        branch_id = self.cleaned_data['branch']
+#        role = self.cleaned_data['role']
+#        last_name = self.cleaned_data['last_name']
+#        first_name = self.cleaned_data['first_name']
+#        middle_name = self.cleaned_data['middle_name']
+#        phone_number = self.cleaned_data['phone_number']
+#        if commit:
+#            user.save()
+#            if role == 'technician':
+#                tech = Technician.objects.create(
+#                    user=user,
+#                    branch_id=branch_id,
+#                    last_name=last_name,
+#                    first_name=first_name,
+#                    middle_name=middle_name,
+#                    phone=phone_number,
+#                )
+#            elif role == 'engineer':
+#                eng = Engineer.objects.create(
+#                    user=user,
+#                    branch_id=branch_id,
+#                    last_name=last_name,
+#                    first_name=first_name,
+#                    middle_name=middle_name,
+#                    phone=phone_number,
+#                )
+#        return user

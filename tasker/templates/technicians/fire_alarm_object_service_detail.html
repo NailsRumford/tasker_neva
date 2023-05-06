@@ -11,36 +11,20 @@
         <div class='container'>
           {% if object.photo %}
             {% thumbnail object.photo "250x250" crop="center" upscale=True as im %}
-              <a href="{{ object.photo.url }}"><img class="card-img my-2" src="{{ im.url }}"></a>
+              <a href="{{ object.photo.url }}"><img class="img" src="{{ im.url }}"></a>
             {% endthumbnail %}
           {% endif %}
         </div>
-        <button onclick="getDirections()">Построить маршрут</button>
-
-<script>
-function getDirections() {
-  // Получить координаты места, для которого нужно построить маршрут
-  let latitude = {{object.address.longitude}};
-  let longitude = {{object.address.latitude}};
-
-  // Проверить, поддерживает ли устройство API навигации
-  if ('geolocation' in navigator && 'openURL' in navigator) {
-    // Получить текущие координаты устройства
-    navigator.geolocation.getCurrentPosition(function(position) {
-      let currentLat = position.coords.latitude;
-      let currentLon = position.coords.longitude;
-
-      // Сформировать ссылку для открытия навигации и передать координаты места назначения
-      let url = `geo:${latitude},${longitude}?q=${latitude},${longitude}(Destination)&saddr=${currentLat},${currentLon}`;
-      navigator.openURL(url);
-    });
-  } else {
-    // Если устройство не поддерживает API навигации, вывести сообщение об ошибке
-    alert('Навигация не поддерживается на этом устройстве');
-  }
-}
-</script>
         <div class='container'>
+          <p class="card-text"><h4>{{ object.name }}</h4></p>
+          <p class="card-text"><h6>Адрес:</h6>{{ object.address }} {% if object.room_number %}помещение:{{object.room_number}}{% endif %}</p>
+          {% if object.remote_number %}
+            <p class="card-text"><h6>Пультовый номер:</h6> {{object.remote_number}}
+          {% endif %}
+          {% if object.contract_number or object.contract_date %}
+          <p class="card-text"><h6>Договор:</h6> {% if object.contract_number %}{{object.contract_number}}{% endif %} от {% if object.contract_date %}{{object.contract_date}}{% endif %}
+          {% else %}
+          {% endif %}
           <p class="card-text"><h6>Обслуживающая организация:</h6> {{ object.service_organizations }}</p>
           <p class="card-text"><h6>Переодичность:</h6> {{ object.frequency }}</p>
           <p class="card-text"><h6>Произвести обслуживания до:</h6> {{ object.next_service_date }}</p>
@@ -62,25 +46,21 @@ function getDirections() {
                 <div id="collapse{{service.id}}" class="accordion-collapse collapse" aria-labelledby="heading{{service.id}}" data-bs-parent="#accordionFailedService">
                   <div style="accordion-body">
                     <div style="container">
-                      <div>
-                        <p><h6>Техник: {{ service.technician }}</h6></p>
-                        <p>
-                        {% if service.comment %}
-                          <p><h6>Комментарий: {{ service.comment }}</h6></p>
-                        {% endif %}
-                      </div>
-                      <div>
-                        <div class="row align-items-center">
-                          <div class="image-container" style="background-color: #f5f5f5; padding: 5px;">
-                            <div class="col d-flex flex-column align-items-center">
-                              {% if service.photo %}
-                              {% thumbnail service.photo "x120" crop="center" upscale=True as im %}
-                                <a href="{{ service.photo.url }}"><img src="{{ im.url }}" alt="Фотография журнала техобслуживания ПС" width="120" height="120"></a>
-                              {% endthumbnail %}
-                              <p><h6>Фотография журнала техобслуживания ПС</h6></p>
-                              {% endif %}
-                            </div>
-                          </div>
+                      <p><h6>Техник: {{ service.technician }}</h6></p>
+                      <p>
+                      {% if service.comment %}
+                        <p><h6>Комментарий: {{ service.comment }}</h6></p>
+                      {% endif %}
+                    <div>
+                    <div class="row align-items-center">
+                      <div class="image-container" style="background-color: #f5f5f5; padding: 5px;">
+                        <div class="col d-flex flex-column align-items-center">
+                          {% if service.photo %}
+                          {% thumbnail service.photo "120x120" crop="center" upscale=True as im %}
+                            <a href="{{ service.photo.url }}"><img src="{{ im.url }}" alt="Фотография журнала техобслуживания ПС" width="120" height="120"></a>
+                          {% endthumbnail %}
+                          <p><h6>Фотография журнала техобслуживания ПС</h6></p>
+                          {% endif %}
                         </div>
                       </div>
                     </div>
@@ -91,8 +71,8 @@ function getDirections() {
           </div>
         {% endif %}
         {% if services %}
-        <p><h5>Журнал теобслуживаний:</h5><p>
-        <div class="accordion" id="accordionService">
+          <p><h5>Журнал теобслуживаний:</h5><p>
+          <div class="accordion" id="accordionService">
           {% for service in services %}
             <div class="accordion-item">
               <h2 class="accordion-header" id="heading{{service.id}}">
@@ -103,43 +83,52 @@ function getDirections() {
               <div id="collapse{{service.id}}" class="accordion-collapse collapse" aria-labelledby="heading{{service.id}}" data-bs-parent="#accordionService">
                 <div style="accordion-body">
                   <div style="container">
-                    <div>
                       <p><h6>Техник: {{ service.technician }}</h6></p>
                       <p>
                       {% if service.comment %}
                         <p><h6>Комментарий: {{ service.comment }}</h6></p>
                       {% endif %}
-                    </div>
-                    <div>
-                      <div class="row align-items-center">
-                        <div class="image-container" style="background-color: #f5f5f5; padding: 5px;">
-                          <div class="col d-flex flex-column align-items-center">
-                            {% if service.service_journal_photo %}
-                              {% thumbnail service.service_journal_photo "x120" crop="center" upscale=True as im %}
-                                <a href="{{ service.service_journal_photo.url }}"><img src="{{ im.url }}" alt="Фотография журнала техобслуживания ПС" width="120" height="120"></a>
-                              {% endthumbnail %}
-                              <p><h6>Фотография журнала техобслуживания ПС</h6></p>
-                            {% endif %}
-                          </div>
+                  </div>
+                  <div style="container">
+                    <div class="row align-items-center">
+                      <div class="image-container" style="background-color: #f5f5f5; padding: 5px;">
+                        <div class="col d-flex flex-column align-items-center">
+                          {% if service.service_journal_title_page_photo %}
+                            {% thumbnail service.service_journal_title_page_photo "x120" crop="center" upscale=True as im %}
+                              <a href="{{ service.service_journal_title_page_photo.url }}"><img src="{{ im.url }}" alt="Фотография журнала техобслуживания ПС" width="120" height="120"></a>
+                            {% endthumbnail %}
+                            <p><h6>Фотография обложки журнала техобслуживания ПС</h6></p>
+                          {% endif %}
                         </div>
-                        <div class="image-container" style="background-color: #f5f5f5; padding: 5px;">
-                          <div class="col d-flex flex-column align-items-center">
-                            {% if service.control_panel_photo %}
-                              {% thumbnail service.control_panel_photo "x120" crop="center" upscale=True as im %}
-                                <a href="{{ service.control_panel_photo.url }}"><img src="{{ im.url }}" alt="Фотография головного прибора ПС" width="120" height="120"></a>
-                              {% endthumbnail %}
-                              <p><h6>Фотография головного прибора ПС</h6></p>
-                            {% endif %}
-                          </div>
+                      </div>
+                      <div class="image-container" style="background-color: #f5f5f5; padding: 5px;">
+                        <div class="col d-flex flex-column align-items-center">
+                          {% if service.service_journal_photo %}
+                            {% thumbnail service.service_journal_photo "x120" crop="center" upscale=True as im %}
+                              <a href="{{ service.service_journal_photo.url }}"><img src="{{ im.url }}" alt="Фотография журнала техобслуживания ПС" width="120" height="120"></a>
+                            {% endthumbnail %}
+                            <p><h6>Фотография журнала техобслуживания ПС</h6></p>
+                          {% endif %}
+                        </div>
+                      </div>
+                      <div class="image-container" style="background-color: #f5f5f5; padding: 5px;">
+                        <div class="col d-flex flex-column align-items-center">
+                          {% if service.control_panel_photo %}
+                            {% thumbnail service.control_panel_photo "x120" crop="center" upscale=True as im %}
+                              <a href="{{ service.control_panel_photo.url }}"><img src="{{ im.url }}" alt="Фотография головного прибора ПС" width="120" height="120"></a>
+                            {% endthumbnail %}
+                            <p><h6>Фотография головного прибора ПС</h6></p>
+                          {% endif %}
                         </div>
                       </div>
                     </div>
+                  </div>
                   </div>
                 </div>  
               </div>
             </div>
           {% endfor %}
-        </div>
+          </div>
         {% endif %}
       </div>
     </div>

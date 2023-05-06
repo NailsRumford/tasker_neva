@@ -175,6 +175,12 @@ class FireAlarmObjectService(models.Model):
     technician = models.ForeignKey(
         Technician, blank=True,
         null=True, on_delete=models.PROTECT, verbose_name='Техник', related_name='service_done')
+    service_journal_title_page_photo = models.ImageField(
+        upload_to='service_photos/', 
+        verbose_name='Фотография обложки журнала техобслуживания ПС',
+        blank=True, 
+        default='media/default_image.jpg'
+    )
     service_journal_photo = models.ImageField(
         upload_to='service_photos/', verbose_name='Фотография журнала техобслуживания ПС')
     control_panel_photo = models.ImageField(

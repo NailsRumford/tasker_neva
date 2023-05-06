@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/custom_base.css'%}">
     <link rel="stylesheet" href="{% static 'css/dashboard.css'%}" >
     <link rel="stylesheet" href="{% static 'css/map.css'%}" >
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <script src="{% static 'js/bootstrap.bundle.min.js'%}"></script>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=dfa7a5ef-d878-47bb-8107-faaeaaf3ca33&lang=ru_RU" type="text/javascript"></script>
     <title>
@@ -24,11 +25,15 @@
     
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
   <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="{% url 'technicians:index' %}">tasker/NEVA</a>
+  {% if user.technician %}
+  <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  {% include 'technicians/includes/sidebarMenu.html' %}
+  {% else %}
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  {% if user.technician %}
-  {% else %}
   <input class="form-control form-control-dark w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search">
   <div class="navbar-nav">
     <div class="nav-item text-nowrap">
@@ -39,12 +44,15 @@
 </header>
 <div class="container-fluid">
   <div class="row">
+    {% if user.technician %}
+    {% else %}
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block   collapse">
       <div class='card mt-2 mr-2'>
        {% block sidebarMenu %}
        {% endblock sidebarMenu %}
       </div>
-    </nav> 
+    </nav>
+    {% endif %}
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       {% block content %}
       {% endblock content %}
