@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+{% block content %}
+{% load user_filters %}
+<div class='container'>
+<div class='container mt-1 mb-1'>
+  <div class="btn-group d-flex mx-auto">
+    <button class="btn btn-warning flex-fill" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMap" aria-expanded="false" aria-controls="collapseMap">
+      Карта
+    </button>
+    <div class="btn-group flex-fill" role="group">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        Фильт объектов
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item bg-secondary" href="{% url 'technicians:fire_alarm_objects' days_left_in_month%}">до конца месяца</a></li>
+        <li><a class="dropdown-item bg-danger" href="{% url 'technicians:fire_alarm_objects' 3 %}">менее 3 дней</a></li>
+        <li><a class="dropdown-item bg-warning" href="{% url 'technicians:fire_alarm_objects' 6 %}">менее 6 дней</a></li>
+        <li><a class="dropdown-item bg-primary" href="{% url 'technicians:fire_alarm_objects' 9 %}">менее 9 дней</a></li>
+        <li><a class="dropdown-item bg-success" href="{% url 'technicians:index' %}">все объекты</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class='container mt-1 mb-1'>
+  <div class='card mt-1 mb-1'>
+    <div class="collapse" id="collapseMap">
+        {% include 'technicians/includes/map.html' %}
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="accordion accordion-flush" id="accordionObjectFireAlarm">
+    {% for object in objects %}
+    <div class="accordion-item">
+      <h2 class="accordion-header " id="flush-heading{{object.id}}" >
+        <button class="accordion-button collapsed position-relative" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{object.id}}" aria-expanded="false" aria-controls="flush-collapse{{object.id}}" style="background-color: #F5F5F5;">
+          <div class='container'>
+            <div class='row'>
+              <div class='col-6'>
+                <span>
+                <div style="width: 10px; height: 10px; border-radius: 50%; background-color: {{object|map_icon_color}};"></div>
+                {{ object.name }}
+                </span>
+              </div>
+              <div class ='col-6'>
+                {{ object.address }} {% if object.room_number %}помещение:{{object.room_number}}{% endif %}
+              </div>
+            </div>
+          </div>
+        </button>
+      </h2>
+      <div id="flush-collapse{{object.id}}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{object.id}}" data-bs-parent="#accordionObjectFireAlarm">
+        <div class="accordion-body">
+          {% if object.photo %}
+          {% thumbnail object.photo "150x150" crop="center" upscale=True as im %}
+            <a href="{{ object.photo.url }}"><img class="img" src="{{ im.url }}"></a>
+          {% endthumbnail %}
+          {% endif %}
+          <div class = 'row'>
+            <div class='container'>
+              {% if object.remote_number %}
+                <p class="card-text"><h6>Пультовый номер:</h6> {{object.remote_number}}
+              {% endif %}
+              {% if object.contract_number or object.contract_date %}
+              <p class="card-text"><h6>Договор:</h6> {% if object.contract_number %}{{object.contract_number}}{% endif %} от {% if object.contract_date %}{{object.contract_date}}{% endif %}
+              {% else %}
+              {% endif %}
+              <p class="card-text"><h6>Обслуживающая организация:</h6> {{ object.service_organizations }}</p>
+              <p class="card-text"><h6>Переодичность:</h6> {{ object.frequency }}</p>
+              <p class="card-text"><h6>Произвести обслуживания до:</h6> {{ object.next_service_date }}</p>
+            </div>
+            <div class="d-grid gap-3">
+              <a href="{% url 'technicians:fire_alarm_object_service_create' object.id %}" class="btn btn-success btn-sm">Сделать обслуживать</a>
+              <a href="{% url 'technicians:failed_service_create' object.id %}" class="btn btn-danger btn-sm">Обслуживание невозможно</a>
+              <a href="{% url 'technicians:fire_alarm_object_service_detail' object.id %}" class="btn btn-primary btn-sm">Карточка объекта</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+</div>
+
+{% endblock content %}
+
+card
