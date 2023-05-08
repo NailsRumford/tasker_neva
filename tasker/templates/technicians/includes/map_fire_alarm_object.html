@@ -1,0 +1,27 @@
+{% load user_filters %}
+<div id="map" style = 'width: 220px;
+height: 220px;'></div>
+
+<script>
+    ymaps.ready(init);
+
+    function init() {
+        var myMap = new ymaps.Map("map", {
+            center: {{fire_alarm_object_geopoint}},
+            zoom: 15
+        }, {
+            searchControlProvider: 'yandex#search'
+        });
+
+        var placemark{{fire_alarm_object.id}} = new ymaps.Placemark(
+            {{ fire_alarm_object_geopoint }}, {
+                balloonContentHeader: '<h5>{{fire_alarm_object.name}}</h5><br>',
+            },{
+                preset: 'islands#dotIcon',
+                iconColor: '{{fire_alarm_object|map_icon_color}}'
+            });
+
+        myMap.geoObjects
+            .add(placemark{{fire_alarm_object.id}})
+    }
+</script>

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+{% load user_filters %}
+{% block content %}
+<div class = 'container mt-2 pt-2 pb-3 border border-dark'>
+  <div class="d-flex">
+    <div class="flex-grow-1">
+      <div class="accordion" id="accordionFireAlarmObjectHeader">
+        <div class="accordion-item">
+          <div id="collapseFoto" class="accordion-collapse collapse show" aria-labelledby="headingFoto" data-bs-parent="#accordionFireAlarmObjectHeader">
+              {% if fire_alarm_object.photo %}
+                {% thumbnail fire_alarm_object.photo "240x240" crop="center" upscale=True as im %}
+                  <a href="{{ fire_alarm_object.photo.url }}"><img class="img" src="{{ im.url }}"></a>
+                {% endthumbnail %}
+              {% endif %}
+          </div>
+        </div>
+        <div class="accordion-item">
+          <div id="collapseMap" class="accordion-collapse collapse" aria-labelledby="headingMap" data-bs-parent="#accordionFireAlarmObjectHeader">
+              {% include 'technicians/includes/map_fire_alarm_object.html' %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="p-2">
+      <a href='http://workspace-neva.online/ru/%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D1%81%D0%BF%D0%B5%D1%86%D0%B8%D0%B0%D0%BB%D0%B8%D1%81%D1%82/%D0%BD%D0%B0%D1%87%D0%B0%D0%BB%D0%BE_%D1%80%D0%B0%D0%B1%D0%BE%D1%87%D0%B5%D0%B3%D0%BE_%D0%B4%D0%BD%D1%8F_%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B3%D0%BE_%D1%81%D0%BF%D0%B5%D1%86%D0%B8%D0%B0%D0%BB%D0%B8%D1%81%D1%82%D0%B0'>
+        <button type="button" class="btn border-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+            <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"></path>
+          </svg>
+        </button>
+      </a>
+      <h2 class="accordion-header" id="headingFoto">
+        <button class="btn border-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFoto" aria-expanded="true" aria-controls="collapseFoto">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-camera" viewBox="0 0 16 16">
+            <path d="M15 12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h1.172a3 3 0 0 0 2.12-.879l.83-.828A1 1 0 0 1 6.827 3h2.344a1 1 0 0 1 .707.293l.828.828A3 3 0 0 0 12.828 5H14a1 1 0 0 1 1 1v6zM2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2z"></path>
+            <path d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"></path>
+          </svg>
+        </button>
+      </h2>
+        <h2 class="accordion-header " id="headingMap">
+          <button class="btn border-0 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMap" aria-expanded="false" aria-controls="collapseMap">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-map" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M15.817.113A.5.5 0 0 1 16 .5v14a.5.5 0 0 1-.402.49l-5 1a.502.502 0 0 1-.196 0L5.5 15.01l-4.902.98A.5.5 0 0 1 0 15.5v-14a.5.5 0 0 1 .402-.49l5-1a.5.5 0 0 1 .196 0L10.5.99l4.902-.98a.5.5 0 0 1 .415.103zM10 1.91l-4-.8v12.98l4 .8V1.91zm1 12.98 4-.8V1.11l-4 .8v12.98zm-6-.8V1.11l-4 .8v12.98l4-.8z"></path>
+            </svg>
+          </button>
+        </h2>
+      <a href='http://workspace-neva.online/ru/%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D1%81%D0%BF%D0%B5%D1%86%D0%B8%D0%B0%D0%BB%D0%B8%D1%81%D1%82/%D0%BD%D0%B0%D1%87%D0%B0%D0%BB%D0%BE_%D1%80%D0%B0%D0%B1%D0%BE%D1%87%D0%B5%D0%B3%D0%BE_%D0%B4%D0%BD%D1%8F_%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B3%D0%BE_%D1%81%D0%BF%D0%B5%D1%86%D0%B8%D0%B0%D0%BB%D0%B8%D1%81%D1%82%D0%B0'>
+        <button type="button" class="btn border-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-cursor" viewBox="0 0 16 16">
+            <path d="M14.082 2.182a.5.5 0 0 1 .103.557L8.528 15.467a.5.5 0 0 1-.917-.007L5.57 10.694.803 8.652a.5.5 0 0 1-.006-.916l12.728-5.657a.5.5 0 0 1 .556.103zM2.25 8.184l3.897 1.67a.5.5 0 0 1 .262.263l1.67 3.897L12.743 3.52 2.25 8.184z"></path>
+          </svg>
+        </button>
+      </a>
+      <a href='http://workspace-neva.online/ru/%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9_%D1%81%D0%BF%D0%B5%D1%86%D0%B8%D0%B0%D0%BB%D0%B8%D1%81%D1%82/%D0%BD%D0%B0%D1%87%D0%B0%D0%BB%D0%BE_%D1%80%D0%B0%D0%B1%D0%BE%D1%87%D0%B5%D0%B3%D0%BE_%D0%B4%D0%BD%D1%8F_%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B3%D0%BE_%D1%81%D0%BF%D0%B5%D1%86%D0%B8%D0%B0%D0%BB%D0%B8%D1%81%D1%82%D0%B0'>
+        <button type="button" class="btn border-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+            <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"></path>
+            <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
+          </svg>
+        </button>
+      </a>
+    </div>
+  </div>
+  <div class='container'>
+    <p class="card-text"><h4>{{ fire_alarm_object.name }}</h4></p>
+    <p class="card-text"><h6>Адрес:</h6>{{ fire_alarm_object.address }} {% if fire_alarm_object.room_number %}помещение:{{fire_alarm_object.room_number}}{% endif %}</p>
+    {% if fire_alarm_objectremote_number %}
+      <p class="card-text"><h6>Пультовый номер:</h6> {{fire_alarm_object.remote_number}}
+    {% endif %}
+    {% if fire_alarm_object.contract_number or fire_alarm_object.contract_date %}
+    <p class="card-text"><h6>Договор:</h6> {% if fire_alarm_object.contract_number %}{{fire_alarm_object.contract_number}}{% endif %} от {% if fire_alarm_object.contract_date %}{{fire_alarm_object.contract_date}}{% endif %}
+    {% else %}
+    {% endif %}
+    <p class="card-text"><h6>Обслуживающая организация:</h6> {{ fire_alarm_object.service_organizations }}</p>
+    <p class="card-text"><h6>Переодичность:</h6> {{ fire_alarm_object.frequency }}</p>
+    <p class="card-text"><h6>Произвести обслуживания до:</h6> {{ fire_alarm_object.next_service_date }}</p>
+  </div>
+  <div class="d-grid gap-3">
+    <a href="{% url 'technicians:fire_alarm_object_service_create' fire_alarm_object.id %}" class="btn btn-success btn-sm">Сделать обслуживать</a>
+    <a href="{% url 'technicians:failed_service_create' fire_alarm_object.id %}" class="btn btn-danger btn-sm">Обслуживание невозможно</a>
+  </div>
+</div>    
+{% endblock content %}

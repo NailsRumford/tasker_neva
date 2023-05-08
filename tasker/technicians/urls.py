@@ -8,6 +8,8 @@ app_name = 'technicians'
 urlpatterns = [
     path('', views.index,
          name='index'),
+    path('tasks/<int:to_date>/show/',
+         views.tasks, name='tasks'),
     path('fire_alarm_objects/<int:to_date>/show/',
          views.fire_alarm_objects, name='fire_alarm_objects'),
     path('fire_alarm_object_service/<int:object_id>/create/',

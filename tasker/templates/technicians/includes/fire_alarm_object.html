@@ -1,0 +1,47 @@
+{% load user_filters %}
+{% load thumbnail %}
+<div class="accordion-item">
+  <h2 class="accordion-header" id="heading-fire-alarm-object{{fire_alarm_object.id}}">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-fire-alarm-object{{fire_alarm_object.id}}" aria-expanded="failed" aria-controls="collapse-fire-alarm-object{{fire_alarm_object.id}}">
+      <div class="ms-2 me-auto">
+        <div class='row'>
+          <div class='col-6'>
+            <span>
+            <div style="width: 10px; height: 10px; border-radius: 50%; background-color: {{fire_alarm_object|map_icon_color}};"></div>
+            <h6>{{ fire_alarm_object.name }}</h6>
+            </span>
+          </div>
+          <div class ='col-6'>
+            {{ fire_alarm_object.address }} {% if fire_alarm_object.room_number %}помещение:{{fire_alarm_object.room_number}}{% endif %}
+          </div>
+        </div>
+      </div>
+    </button>
+  </h2>
+  <div id="collapse-fire-alarm-object{{fire_alarm_object.id}}" class="accordion-collapse collapse " aria-labelledby="heading-fire-alarm-object{{fire_alarm_object.id}}" data-bs-parent="#accordion-fire-alarm-objects">
+    <div class="accordion-body">
+      {% if fire_alarm_object.photo %}
+      {% thumbnail fire_alarm_object.photo "150x150" crop="center" upscale=True as im %}
+        <a href="{{ fire_alarm_object.photo.url }}"><img class="img" src="{{ im.url }}"></a>
+      {% endthumbnail %}
+      {% endif %}
+      <div class='container'>
+        {% if fire_alarm_object.remote_number %}
+          <p class="card-text"><h6>Пультовый номер:</h6> {{fire_alarm_object.remote_number}}
+        {% endif %}
+          {% if fire_alarm_object.contract_number or fire_alarm_object.contract_date %}
+            <p class="card-text"><h6>Договор:</h6> {% if fire_alarm_object.contract_number %}{{fire_alarm_object.contract_number}}{% endif %} от {% if fire_alarm_object.contract_date %}{{fire_alarm_object.contract_date}}{% endif %}
+          {% else %}
+        {% endif %}
+        <p class="card-text"><h6>Обслуживающая организация:</h6> {{ fire_alarm_object.service_organizations }}</p>
+        <p class="card-text"><h6>Переодичность:</h6> {{ fire_alarm_object.frequency }}</p>
+        <p class="card-text"><h6>Произвести обслуживания до:</h6> {{ fire_alarm_object.next_service_date }}</p>
+      </div>
+      <div class="d-grid gap-3">
+        <a href="{% url 'technicians:fire_alarm_object_service_create' fire_alarm_object.id %}" class="btn btn-success btn-sm">Сделать обслуживать</a>
+        <a href="{% url 'technicians:failed_service_create' fire_alarm_object.id %}" class="btn btn-danger btn-sm">Обслуживание невозможно</a>
+        <a href="{% url 'technicians:fire_alarm_object_service_detail' fire_alarm_object.id %}" class="btn btn-primary btn-sm">Карточка объекта</a>
+      </div>
+    </div>
+  </div>
+</div>

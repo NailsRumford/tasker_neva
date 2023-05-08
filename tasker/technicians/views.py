@@ -8,51 +8,33 @@ from django.utils import timezone
 from fire_alarm_objects.forms import FireAlarmObjectServiceForm, FailedServiceForm
 import datetime
 import calendar
+from .business_services import TechnicianIndex, TechnicianFireAlarmObjects, TechnicianFireAlarmObject
 
 
 @technician_required
 def index(request):
-    technician = get_object_or_404(Technician, user=request.user)
-    branch_location = technician.branch.get_location()
-    fire_alarm_objects = FireAlarmObject.objects.select_related(
-        'address').filter(
-        service_zone__technicians__technician_id=technician.id)
+    technician = TechnicianIndex(request)
+    context = technician.get_context()
     template = "technicians/index.html"
-
-    context = {'objects': fire_alarm_objects,
-               'branch_location': branch_location,
-               'mobi': True,
-               'days_left_in_month': days_left_in_month()}
     return render(request, template, context)
 
-
-def days_left_in_month():
-    today = datetime.date.today()
-    _, days_in_month = calendar.monthrange(today.year, today.month)
-    days_left = (datetime.date(
-        today.year, today.month, days_in_month) - today).days
-    return days_left
-
-
-def get_fire_alarm_objects(request, to_date):
-    technician = get_object_or_404(Technician, user=request.user)
-    fire_alarm_objects = FireAlarmObject.objects.filter(
-        Q(service_zone__technicians__technician_id=technician.id) &
-        Q(next_service_date__lte=timezone.now() + timezone.timedelta(days=to_date)))
-    return fire_alarm_objects
-
+def tasks(request, to_date):
+    technicina= TechnicianIndex(request)
+    context = technicina.get_context(to_date)
+    template = "technicians/index.html"
+    return render(request, template, context)
 
 def fire_alarm_objects(request, to_date):
-    technician = get_object_or_404(Technician, user=request.user)
-    fire_alarm_objects = get_fire_alarm_objects(request, to_date)
-    branch_location = technician.branch.get_location()
-    template = "technicians/index.html"
-    context = {'objects': fire_alarm_objects,
-               'branch_location': branch_location,
-               'mobi': True,
-               'days_left_in_month': days_left_in_month()}
+    technician= TechnicianFireAlarmObjects(request)
+    context = technician.get_context(to_date)
+    template = "technicians/fire_alarm_objects.html"
     return render(request, template, context)
 
+def fire_alarm_object_service_detail(request, object_id):
+    technician = TechnicianFireAlarmObject(request)
+    context =  technician.get_context(object_id)
+    template = 'technicians/fire_alarm_object_detail.html'
+    return render(request, template, context)
 
 def fire_alarm_object_service_create(request, object_id):
     form = FireAlarmObjectServiceForm(request.POST or None,
@@ -74,19 +56,6 @@ def fire_alarm_object_service_create(request, object_id):
     return render(request, template, context)
 
 
-def fire_alarm_object_service_detail(request, object_id):
-    fire_alarm_object = get_object_or_404(FireAlarmObject, id=object_id)
-    services = FireAlarmObjectService.objects.filter(
-        fire_alarm_object_id=object_id).order_by('-service_date')
-    failed_services = FailedService.objects.filter(fire_alarm_object_id=object_id).exclude(
-        Q(status='completed')).order_by('-service_date')
-    context = {
-        'object': fire_alarm_object,
-        'services': services,
-        'failed_services': failed_services,
-        'mobi': True,
-    }
-    return render(request, 'technicians/fire_alarm_object_service_detail.html', context)
 
 
 def failed_service_create(request, object_id):
