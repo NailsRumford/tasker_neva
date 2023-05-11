@@ -54,6 +54,13 @@
                     Изменить зону
                 </a>
             {% endif %}
+            {% if is_edite %}
+            <a href="{% url 'engineers:fire_alarm_object_edite' fire_alarm_object.id %}">
+              <button class="btn btn-primary">
+                Редактировать
+              </button>
+            </a>
+            {% endif %}
           </div>
         </div>
       </div>

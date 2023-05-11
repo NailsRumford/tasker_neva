@@ -29,6 +29,12 @@ class Address(models.Model):
 
     def get_geopoint(self):
         return f'[{self.latitude},{self.longitude}]'
+    
+    def get_geopoint_v2(self):
+        return f'{self.latitude},{self.longitude}'
+    
+    def get_navigator_link(self):
+        return f'yandexnavi://build_route_on_map?lat_to={self.latitude}&lon_to={self.longitude}'
 
 
 class FireAlarmObject(models.Model):

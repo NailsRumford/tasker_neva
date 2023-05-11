@@ -12,8 +12,10 @@
         <div class="row">
           <div class="col-md-6 col-sm-12">
             <div class="card-body">
+              {{ fire_alarm_failed_service.fire_alarm_object }}
+              {{ fire_alarm_failed_service.fire_alarm_object.address}}
               <p class="card-text">Произвел обслуживание: {{ fire_alarm_failed_service.technician }}</p>
-              <p class="card-text">Коментарий: {{ fire_alarm_failed_service.coment }}</p>
+              <p class="card-text">Коментарий: {{ fire_alarm_failed_service.comment }}</p>
               <div class='row'>
                 <div class='col-6'>
                   <p class="card-text">Фото</p>

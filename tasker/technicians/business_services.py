@@ -7,7 +7,7 @@ import calendar
 from django.db.models import Q
 from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect
-
+from service_zones.models import ServiceZone
 
 class TechnicianSuit:
     """
@@ -28,7 +28,7 @@ class TechnicianSuit:
     def get_fire_alarm_objects(self, to_date):
         fire_alarm_objects = FireAlarmObject.objects.filter(
             Q(service_zone__technicians__technician_id=self.technician.id) &
-            Q(next_service_date__lte=timezone.now() + timezone.timedelta(days=to_date)))
+            Q(next_service_date__lte=timezone.now() + timezone.timedelta(days=to_date))).select_related('address')
         return fire_alarm_objects
 
     def days_left_in_month():
@@ -44,6 +44,8 @@ class TechnicianSuit:
         """
         context = {'technician': self.technician}
         branch = self.technician.branch
+        service_zones = ServiceZone.objects.filter(technicians__technician_id=self.technician.id)
+        context['service_zones'] = service_zones
         context['branch'] = branch
         context['branch_location'] = branch.get_location()
         return context
@@ -96,6 +98,8 @@ class TechnicianFireAlarmObject(TechnicianSuit):
         context['fire_alarm_object_services']= fire_alarm_object_services
         context['failed_services'] = failed_services
         context['fire_alarm_object'] = fire_alarm_object
+        context['navigator_link'] = fire_alarm_object.address.get_navigator_link()
         context['fire_alarm_object_geopoint'] = fire_alarm_object.address.get_geopoint()
+        context['fire_alarm_object_geopoint_v2'] = fire_alarm_object.address.get_geopoint_v2()
         context['mobi'] = True  # устанавливает мобильный интерфейс
         return context

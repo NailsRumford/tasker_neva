@@ -24,9 +24,9 @@
             {% endfor %}
           {% endif %}
           {% if is_edit %}
-            <form id="fire_alarm_object-form" method="POST" enctype="multipart/form-data" action="{% url 'engineers:fire_alarm_object_edit' fire_alarm_object_zone.id %}">
+            <form id="fire_alarm_object-form" method="POST" enctype="multipart/form-data" action="{% url 'engineers:fire_alarm_object_edite' fire_alarm_object.id %}">
           {% else %}
-            <form id="fire_alarm_object-form" method="POST" enctype="multipart/form-data" action="{% url 'engineers:create_fire_alarm_object' %}">
+            <form id="fire_alarm_object-form" method="POST" enctype="multipart/form-data" action="{% url 'engineers:create_fire_alarm_object'%}">
           {% endif %}
             {% csrf_token %}
             {% for field in fire_alarm_object_form %}
@@ -64,7 +64,10 @@
                 </div>
               {% endif %} 
             {% endfor %}
-            <button id="add_fire_alarm_object" class="btn btn-success btn-sm">Сохранить зону</button>
+            <button type="submit" class="btn btn-success btn-sm" name="save_and_view" value="Save and View">Сохранить</button>
+            {% if not is_edit %}
+              <button type="submit" class="btn btn-primary btn-sm" name="save_and_add_another" value="Save and Add Another">Сохранить и добавить</button>
+            {% endif %}
           </form>
         </div>
         </div>  
@@ -90,5 +93,14 @@
     </div>
   </div>
 </div>
+{% endblock %}
 
-{% endblock %}  
+
+
+
+
+
+
+
+
+

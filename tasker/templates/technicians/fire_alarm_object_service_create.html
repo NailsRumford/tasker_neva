@@ -1,70 +1,99 @@
 {% extends 'base.html' %}
-{% block sidebarMenu %}
-  {% include 'technicians/includes/sidebarMenu.html' %}
-{% endblock sidebarMenu %}
 {% load thumbnail %}
+{% load user_filters %}
 {% block content %}
-<div class="container">
-    <div class = 'row'>
-      <div class='container'>
-        <p class="card-text"><h5>{{ object.name }}</h5></p>
-        <p class="card-text"><h6>{{ object.address}}</h6></p>
-        <p class="card-text"><h6>Обслуживающая организация:</h6> {{ object.service_organizations }}</p>
-        <p class="card-text"><h6>Переодичность:</h6> {{ object.frequency }}</p>
-        <p class="card-text"><h6>Произвести обслуживания до:</h6> {{ object.next_service_date }}</p>
+<div class = 'container mt-2 pt-2 pb-3 border border-dark'>
+  <div class="d-flex">
+    <div class="flex-grow-1">
+      <p class="card-text"><h5>{{ object.name }}</h5></p>
+    </div>
+    <div class="ml-auto">
+      <a href='http://workspace-neva.online/ru/%D0%9F%D0%BE%D0%B6%D0%B0%D1%80%D0%BD%D0%B0%D1%8F_%D1%81%D0%B8%D0%B3%D0%BD%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F/%D0%9E%D0%B1%D1%81%D0%BB%D1%83%D0%B6%D0%B8%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5_%D0%BF%D0%BE%D0%B6%D0%B0%D1%80%D0%BD%D0%BE%D0%B9_%D1%81%D0%B8%D0%B3%D0%BD%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8'>
+        <button type="button" class="btn border-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+            <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"></path>
+          </svg>
+        </button>
+      </a>
+    </div>
+  </div>
+  <div class="container">
+    <p class="card-text"><h6>{{ object.address}}</h6></p>
+    <p class="card-text"><h6>Обслуживающая организация:</h6> {{ object.service_organizations }}</p>
+    <p class="card-text"><h6>Переодичность:</h6> {{ object.frequency }}</p>
+    <p class="card-text"><h6>Произвести обслуживания до:</h6> {{ object.next_service_date }}</p>
+  </div>
+  <div class="container">
+    <p class="card-text"><h6>Чек лист:</h6>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault">
+          Понель и датчики находятся в исправном состоянии 
+        </label>
       </div>
-      <div class="card">
-        <div class="card-header">       
-            {% if is_edit %}
-            Редактировать запись
-            {% else %}
-            Добавить запись
-            {% endif %}           
-        </div>
-        <div class="card-body">
-          {% if form.errors %}
-            {% for field in form %}
-              {% for error in field.errors %}            
-                <div class="alert alert-danger">
-                    {{ error|escape }}
-                </div>
-              {% endfor %}
-            {% endfor %}
-            {% for error in form.non_field_errors %}
-              <div class="alert alert-danger">
-                {{ error|escape }}
-              </div>
-            {% endfor %}
-          {% endif %}
-          {% if is_edit %}
-            <form id="fire_alarm_object_service-form" method="POST" enctype="multipart/form-data" action="{% url 'engineers:service_zone_edit' zone.id %}">
-          {% else %}
-            <form id="fire_alarm_object_service-form" method="POST" enctype="multipart/form-data" action="{% url 'technicians:fire_alarm_object_service_create' object.id%}">
-          {% endif %}
-          {% csrf_token %}
-                {% for field in form %}
-                    <div class="form-group row my-3 p-3">
-                      <label for="{{field.id_for_label}}">
-                        {{ field.label }}
-                        {% if field.field.required %}                  
-                          <span class="required text-danger" >*</span>
-                        {% endif %}                
-                      </label>
-                      {{ field }}
-                      {% if field.help_text %}             
-                        <small id="{{ field.id_for_label }}-help" class="form-text text-muted">
-                          {{ field.help_text }}
-                        </small>
-                      {% endif %}                
-                    </div>
-                {% endfor %}
-              <div class ='container'>
-                <button id="fire_alarm_object_service-form" class="btn btn-success btn-sm">Сделать обслуживание</button>
-                <a href="{% url 'technicians:index' %}" class="btn btn-primary btn-sm">Отмена</a>
-              </div>
-            </form>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault">
+          Все зоны востановлены и не находятся в аварии 
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault">
+          Проверка работоспособности ИПР 
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault">
+          Произведена сработка в каждом помещении 
+        </label>
+      </div>
+    </p>
+  </div>
+  <div class="container">
+    {% if form.errors %}
+      {% for field in form %}
+        {% for error in field.errors %}            
+          <div class="alert alert-danger">
+              {{ error|escape }}
           </div>
+        {% endfor %}
+      {% endfor %}
+      {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+          {{ error|escape }}
         </div>
-      </div>
+      {% endfor %}
+    {% endif %}
+    {% if is_edit %}
+      <form id="fire_alarm_object_service-form" method="POST" enctype="multipart/form-data" action="{% url 'engineers:service_zone_edit' zone.id %}">
+    {% else %}
+      <form id="fire_alarm_object_service-form" method="POST" enctype="multipart/form-data" action="{% url 'technicians:fire_alarm_object_service_create' object.id%}">
+    {% endif %}
+      {% csrf_token %}
+        {% for field in form %}
+          <div class="form-group row my-3 p-3">
+            <label for="{{field.id_for_label}}">
+              {{ field.label }}
+              {% if field.field.required %}                  
+                <span class="required text-danger" >*</span>
+              {% endif %}                
+            </label>
+            {{ field }}
+            {% if field.help_text %}             
+              <small id="{{ field.id_for_label }}-help" class="form-text text-muted">
+                {{ field.help_text }}
+              </small>
+            {% endif %}                
+          </div>
+        {% endfor %}
+        <button id="fire_alarm_object_service-form" class="btn btn-success btn-sm">Сделать обслуживание</button>
+        <a href="{% url 'technicians:index' %}" class="btn btn-primary btn-sm">Отмена</a>
+      </form>
+    </div>
+  </div>
 </div>
+
 {% endblock content %}

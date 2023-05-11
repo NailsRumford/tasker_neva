@@ -36,6 +36,8 @@ class FireAlarmObjectForm(forms.ModelForm):
 
     def __init__(self, engineer=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if self.instance:
+            self.initial['address'] = self.instance.address.address
         self.fields['last_service_date'].widget.attrs['placeholder'] = (
             'дд.мм.гггг')
         self.fields['contract_date'].widget.attrs['placeholder'] = (

@@ -260,11 +260,31 @@ def create_fire_alarm_object(request):
         fire_alarm_object.branch = engineer.branch
         fire_alarm_object.auto_add_service_zone()
         fire_alarm_object.save()
-        if fire_alarm_object.service_zone:
+        if 'save_and_add_another' in request.POST:
+            return redirect('engineers:create_fire_alarm_object')
+        else:
             return redirect('engineers:fire_alarm_object_detail', fire_alarm_object.id)
-        return redirect('engineers:fire_alarm_object_detail', fire_alarm_object.id)
     template = 'engineers/fire_alarm_object/create_fire_alarm_object.html'
     context = {'fire_alarm_object_form': fire_alarm_object_form}
+    return render(request, template, context)
+
+
+@engineer_required
+def fire_alarm_object_edite(request, object_id):
+    engineer = get_object_or_404(Engineer, user=request.user)
+    fire_alarm_object = FireAlarmObject.objects.select_related('address').get(id=object_id)
+    fire_alarm_object_form = FireAlarmObjectForm(
+        engineer, request.POST or None, files=request.FILES or None, instance=fire_alarm_object)
+    if fire_alarm_object_form.is_valid():
+        fire_alarm_object = fire_alarm_object_form.save(commit=False)
+        fire_alarm_object.branch = engineer.branch
+        fire_alarm_object.auto_add_service_zone()
+        fire_alarm_object.save()
+        return redirect('engineers:fire_alarm_object_detail', fire_alarm_object.id)
+    template = 'engineers/fire_alarm_object/create_fire_alarm_object.html'
+    context = {'fire_alarm_object_form': fire_alarm_object_form,
+               'is_edit': True,
+               'fire_alarm_object':fire_alarm_object}
     return render(request, template, context)
 
 
@@ -310,6 +330,7 @@ def fire_alarm_object_detail(request, object_id):
         'fire_alarm_object_services': fire_alarm_object_services,
         'fire_alarm_object_failed_services': fire_alarm_object_failed_services,
         'show_delete': True,
+        'is_edite':True,
         'days_left_in_month': days_left_in_month(),
         'assign_zone_to_object_form': assign_zone_to_object_form}
     template = 'engineers/fire_alarm_object_detail.html'
