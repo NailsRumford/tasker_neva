@@ -23,7 +23,7 @@ mixer==7.2.2
 more-itertools==9.1.0
 numpy==1.24.2
 packaging==23.0
-Pillow==9.4.0
+Pillow==10.0.1
 pluggy==1.0.0
 py==1.11.0
 pycodestyle==2.10.0
